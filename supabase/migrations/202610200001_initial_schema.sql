@@ -407,6 +407,53 @@ on public.admin_audit_logs for select to authenticated
 using (public.has_permission('audit.view') or public.is_main_admin());
 -- Intentionally no client UPDATE/DELETE policies on audit logs. Writes must be server-controlled.
 
+
+-- Initial role defaults. Main-admin assignments are deliberately NOT seeded to a
+-- hard-coded identity; bootstrap the first main admin manually after verifying the account.
+insert into public.role_permissions (role_key, permission_key, allowed) values
+  ('main_admin', 'users.view', true),
+  ('main_admin', 'users.restrict', true),
+  ('main_admin', 'users.unrestrict', true),
+  ('main_admin', 'roles.view', true),
+  ('main_admin', 'roles.manage', true),
+  ('main_admin', 'content.view', true),
+  ('main_admin', 'content.manage', true),
+  ('main_admin', 'audit.view', true),
+  ('admin', 'users.view', true),
+  ('admin', 'users.restrict', false),
+  ('admin', 'users.unrestrict', false),
+  ('admin', 'roles.view', false),
+  ('admin', 'roles.manage', false),
+  ('admin', 'content.view', true),
+  ('admin', 'content.manage', false),
+  ('admin', 'audit.view', false),
+  ('member', 'users.view', false),
+  ('member', 'users.restrict', false),
+  ('member', 'users.unrestrict', false),
+  ('member', 'roles.view', false),
+  ('member', 'roles.manage', false),
+  ('member', 'content.view', false),
+  ('member', 'content.manage', false),
+  ('member', 'audit.view', false)
+on conflict (role_key, permission_key) do nothing;
+
+-- Public catalogue content can be read without an account; community profiles remain
+-- authenticated-only. All write policies still require a database-side permission check.
+create policy "public read published servers"
+on public.servers for select to anon
+using (is_published);
+create policy "public read published mods"
+on public.mods for select to anon
+using (is_published);
+create policy "public read published explore items"
+on public.explore_items for select to anon
+using (is_published);
+create policy "public read verified published streams"
+on public.live_streams for select to anon
+using (is_published and verified_at is not null);
+
+grant select on public.servers, public.mods, public.explore_items, public.live_streams to anon;
+
 -- Explicitly do not grant anon access to community data.
 revoke all on public.profiles, public.user_settings, public.user_roles, public.role_permissions,
   public.friendships, public.user_stats, public.achievements, public.user_achievements,
