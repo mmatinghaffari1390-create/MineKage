@@ -9,7 +9,7 @@ type Locale = 'en' | 'fa'
 type Section = 'home' | 'servers' | 'mods' | 'explore' | 'live' | 'community' | 'leaderboard'
 type ExploreKind = 'All' | 'Mods' | 'Shaders' | 'Resource packs' | 'Modpacks' | 'Data packs' | 'Maps' | 'Plugins'
 type LiveProject = { project_id: string; slug: string; title: string; description: string; project_type: string; downloads: number; icon_url?: string; author: string; versions: string[]; categories: string[] }
-type JavaVersion = 'all' | '26.3' | '26.2' | '26.1.2' | '26.1.1' | '26.1' | '1.21.11' | '1.21.10' | '1.21.8' | '1.21.4' | '1.21.1' | '1.21' | '1.20.4' | '1.20.1' | '1.19.4' | '1.19.2' | '1.18.2' | '1.16.5' | '1.12.2' | '1.8.9'
+type JavaVersion = string
 
 const copy = {
   en: {
@@ -110,6 +110,7 @@ function App() {
   const searchInputRef = useRef<HTMLInputElement>(null)
   const [exploreKind, setExploreKind] = useState<ExploreKind>('All')
   const [javaVersion, setJavaVersion] = useState<JavaVersion>('all')
+  const [javaVersions, setJavaVersions] = useState<string[]>([])
   const [liveProjects, setLiveProjects] = useState<LiveProject[]>([])
   const [projectsLoading, setProjectsLoading] = useState(false)
   const [projectsError, setProjectsError] = useState(false)
@@ -134,9 +135,19 @@ function App() {
   }, [])
   const navKeys: Section[] = ['home', 'servers', 'mods', 'explore', 'live', 'community', 'leaderboard']
   const kinds: ExploreKind[] = ['All', 'Mods', 'Shaders', 'Resource packs', 'Modpacks', 'Data packs', 'Maps', 'Plugins']
-  const javaVersions: JavaVersion[] = ['all', '26.3', '26.2', '26.1.2', '26.1.1', '26.1', '1.21.11', '1.21.10', '1.21.8', '1.21.4', '1.21.1', '1.21', '1.20.4', '1.20.1', '1.19.4', '1.19.2', '1.18.2', '1.16.5', '1.12.2', '1.8.9']
   const modrinthSearchUrl = `https://modrinth.com/discover/${({ All: 'modsearch', Mods: 'modsearch', Shaders: 'shadersearch', 'Resource packs': 'resourcepacksearch', Modpacks: 'modpacksearch', 'Data packs': 'datapacksearch', Maps: 'worldsearch', Plugins: 'pluginsearch' } as Record<ExploreKind, string>)[exploreKind]}${javaVersion === 'all' ? '' : `?g=${encodeURIComponent(javaVersion)}`}`
 
+  useEffect(() => {
+    const controller = new AbortController()
+    fetch('https://api.modrinth.com/v2/tag/game_version', { signal: controller.signal })
+      .then((response) => { if (!response.ok) throw new Error('Version list request failed'); return response.json() })
+      .then((data: { version?: string; version_type?: string }[]) => {
+        const releases = data.filter((item) => item.version && item.version_type === 'release').map((item) => item.version as string)
+        setJavaVersions(Array.from(new Set(releases)))
+      })
+      .catch((error: unknown) => { if (!(error instanceof Error && error.name === 'AbortError')) setJavaVersions(['26.3', '26.2', '26.1.2', '26.1.1', '26.1', '1.21.11', '1.21.10', '1.21.8', '1.21.4', '1.21.1', '1.21', '1.20.4', '1.20.1', '1.19.4', '1.19.2', '1.18.2', '1.16.5', '1.12.2', '1.8.9']) })
+    return () => controller.abort()
+  }, [])
   useEffect(() => {
     const controller = new AbortController()
     const projectType = ({ All: 'mod', Mods: 'mod', Shaders: 'shader', 'Resource packs': 'resourcepack', Modpacks: 'modpack', 'Data packs': 'datapack', Maps: 'world', Plugins: 'plugin' } as Record<ExploreKind, string>)[exploreKind]
@@ -223,7 +234,7 @@ function App() {
           <div className="filter-pills" aria-label="Filter destination type">
             {kinds.map((kind) => <button key={kind} className={exploreKind === kind ? 'filter-pill selected' : 'filter-pill'} onClick={() => setExploreKind(kind)}>{kind === 'All' ? t.all : locale === 'fa' ? ({ Mods: 'مودها', Shaders: 'شیدرها', 'Resource packs': 'ریسورس‌پک‌ها', Modpacks: 'مودپک‌ها', 'Data packs': 'دیتاپک‌ها', Maps: 'نقشه‌ها', Plugins: 'پلاگین‌ها' }[kind] ?? kind) : kind}</button>)}
           </div>
-          <div className="version-tools"><label htmlFor="java-version">{locale === 'fa' ? 'نسخه جاوا' : 'JAVA VERSION'}</label><select id="java-version" value={javaVersion} onChange={(e) => setJavaVersion(e.target.value as JavaVersion)}>{javaVersions.map((version) => <option key={version} value={version}>{version === 'all' ? (locale === 'fa' ? 'همه نسخه‌ها' : 'All versions') : version}</option>)}</select><a className="button button-outline version-browse" href={modrinthSearchUrl} target="_blank" rel="noreferrer">{locale === 'fa' ? 'جست‌وجوی همه پروژه‌ها' : 'Browse all projects'}<ArrowUpRight size={15} /></a></div>
+          <div className="version-tools"><label htmlFor="java-version">{locale === 'fa' ? 'نسخه جاوا' : 'JAVA VERSION'}</label><select id="java-version" value={javaVersion} onChange={(e) => setJavaVersion(e.target.value as JavaVersion)}>{['all', ...javaVersions].map((version) => <option key={version} value={version}>{version === 'all' ? (locale === 'fa' ? 'همه نسخه‌ها' : 'All versions') : version}</option>)}</select><a className="button button-outline version-browse" href={modrinthSearchUrl} target="_blank" rel="noreferrer">{locale === 'fa' ? 'جست‌وجوی همه پروژه‌ها' : 'Browse all projects'}<ArrowUpRight size={15} /></a></div>
         </div>
         <div className="destination-grid">
           {filteredDestinations.map((item, index) => {
