@@ -251,7 +251,7 @@ function App() {
                 <div className="destination-glyph"><Icon size={38} strokeWidth={1.25} /></div>
                 <span className="destination-index">0{index + 1}</span><span className="destination-tag">{item.tag}</span>
               </div>
-              <div className="destination-info"><div><h3>{item.name}</h3><p>{item.sub}</p></div><a className="round-arrow" href={item.url} target="_blank" rel="noreferrer" aria-label={`Open official page for ${item.name}`}><ArrowUpRight size={17} /></a></div>
+              <div className="destination-info"><div><h3>{item.name}</h3><p>{item.sub}</p></div><a className="round-arrow" href={item.url} target="_blank" rel="noreferrer" aria-label={locale === 'fa' ? `باز کردن صفحه رسمی ${item.name}` : `Open official page for ${item.name}`}><ArrowUpRight size={17} /></a></div>
             </article>
           })}
           {filteredDestinations.length === 0 && <div className="empty-state"><Search size={24} /><p>{t.noResults}</p></div>}
