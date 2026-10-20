@@ -2,7 +2,7 @@
 -- These metadata tests do not replace authenticated multi-user integration tests.
 begin;
 create extension if not exists pgtap with schema extensions;
-select plan(6);
+select plan(8);
 
 select ok(
   exists (select 1 from pg_trigger where tgname = 'guard_friendship_update' and not tgisinternal),
@@ -52,6 +52,22 @@ select ok(
       and cmd = 'UPDATE' and roles @> array['authenticated']
   ),
   'authenticated profile update policy exists'
+);
+
+
+select ok(
+  to_regprocedure('public.profile_is_visible(uuid)') is not null,
+  'profile visibility is checked through a dedicated RLS-safe function'
+);
+
+select ok(
+  exists (
+    select 1 from pg_policies
+    where schemaname = 'public' and tablename = 'profiles'
+      and policyname = 'authenticated users read visible profiles'
+      and qual like '%profile_is_visible%'
+  ),
+  'profile read policy delegates visibility lookup to the helper function'
 );
 
 select * from finish();
