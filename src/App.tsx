@@ -10,6 +10,7 @@ type Section = 'home' | 'servers' | 'mods' | 'explore' | 'live' | 'community' | 
 type ExploreKind = 'All' | 'Mods' | 'Shaders' | 'Resource packs' | 'Modpacks' | 'Data packs' | 'Maps' | 'Plugins'
 type LiveProject = { project_id: string; slug: string; title: string; description: string; project_type: string; downloads: number; icon_url?: string; author: string; versions: string[]; categories: string[] }
 type JavaVersion = string
+type ModLoader = 'all' | 'fabric' | 'forge' | 'neoforge' | 'quilt'
 
 const copy = {
   en: {
@@ -111,6 +112,7 @@ function App() {
   const [exploreKind, setExploreKind] = useState<ExploreKind>('All')
   const [javaVersion, setJavaVersion] = useState<JavaVersion>('all')
   const [javaVersions, setJavaVersions] = useState<string[]>([])
+  const [modLoader, setModLoader] = useState<ModLoader>('all')
   const [liveProjects, setLiveProjects] = useState<LiveProject[]>([])
   const [projectsLoading, setProjectsLoading] = useState(false)
   const [projectsError, setProjectsError] = useState(false)
@@ -153,6 +155,7 @@ function App() {
     const projectType = ({ All: 'mod', Mods: 'mod', Shaders: 'shader', 'Resource packs': 'resourcepack', Modpacks: 'modpack', 'Data packs': 'datapack', Maps: 'world', Plugins: 'plugin' } as Record<ExploreKind, string>)[exploreKind]
     const facets: string[][] = [['project_type:' + projectType]]
     if (javaVersion !== 'all') facets.push(['versions:' + javaVersion])
+    if (exploreKind === 'Mods' && modLoader !== 'all') facets.push(['categories:' + modLoader])
     const params = new URLSearchParams({ query: search.trim(), facets: JSON.stringify(facets), limit: '12', index: 'relevance' })
     setProjectsLoading(true)
     setProjectsError(false)
@@ -162,7 +165,7 @@ function App() {
       .catch((error: unknown) => { if (error instanceof Error && error.name === 'AbortError') return; setProjectsError(true); setLiveProjects([]) })
       .finally(() => { if (!controller.signal.aborted) setProjectsLoading(false) })
     return () => controller.abort()
-  }, [exploreKind, javaVersion, search])
+  }, [exploreKind, javaVersion, modLoader, search])
   const filteredDestinations = useMemo(() => destinations.filter((item) => {
     const matchKind = exploreKind === 'All' || item.kind === exploreKind
     const q = search.trim().toLowerCase()
@@ -234,6 +237,7 @@ function App() {
           <div className="filter-pills" aria-label="Filter destination type">
             {kinds.map((kind) => <button key={kind} className={exploreKind === kind ? 'filter-pill selected' : 'filter-pill'} onClick={() => setExploreKind(kind)}>{kind === 'All' ? t.all : locale === 'fa' ? ({ Mods: 'مودها', Shaders: 'شیدرها', 'Resource packs': 'ریسورس‌پک‌ها', Modpacks: 'مودپک‌ها', 'Data packs': 'دیتاپک‌ها', Maps: 'نقشه‌ها', Plugins: 'پلاگین‌ها' }[kind] ?? kind) : kind}</button>)}
           </div>
+          {exploreKind === 'Mods' && <div className="version-tools"><label htmlFor="mod-loader">{locale === 'fa' ? 'لودر مود' : 'MOD LOADER'}</label><select id="mod-loader" value={modLoader} onChange={(e) => setModLoader(e.target.value as ModLoader)}>{(['all', 'fabric', 'forge', 'neoforge', 'quilt'] as ModLoader[]).map((loader) => <option key={loader} value={loader}>{loader === 'all' ? (locale === 'fa' ? 'همه لودرها' : 'All loaders') : loader[0].toUpperCase() + loader.slice(1)}</option>)}</select></div>}
           <div className="version-tools"><label htmlFor="java-version">{locale === 'fa' ? 'نسخه جاوا' : 'JAVA VERSION'}</label><select id="java-version" value={javaVersion} onChange={(e) => setJavaVersion(e.target.value as JavaVersion)}>{['all', ...javaVersions].map((version) => <option key={version} value={version}>{version === 'all' ? (locale === 'fa' ? 'همه نسخه‌ها' : 'All versions') : version}</option>)}</select><a className="button button-outline version-browse" href={modrinthSearchUrl} target="_blank" rel="noreferrer">{locale === 'fa' ? 'جست‌وجوی همه پروژه‌ها' : 'Browse all projects'}<ArrowUpRight size={15} /></a></div>
         </div>
         <div className="destination-grid">
