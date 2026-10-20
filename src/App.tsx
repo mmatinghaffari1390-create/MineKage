@@ -137,7 +137,7 @@ function App() {
   }, [])
   const navKeys: Section[] = ['home', 'servers', 'mods', 'explore', 'live', 'community', 'leaderboard']
   const kinds: ExploreKind[] = ['All', 'Mods', 'Shaders', 'Resource packs', 'Modpacks', 'Data packs', 'Maps', 'Plugins']
-  const modrinthSearchUrl = `https://modrinth.com/discover/${({ All: 'modsearch', Mods: 'modsearch', Shaders: 'shadersearch', 'Resource packs': 'resourcepacksearch', Modpacks: 'modpacksearch', 'Data packs': 'datapacksearch', Maps: 'worldsearch', Plugins: 'pluginsearch' } as Record<ExploreKind, string>)[exploreKind]}${javaVersion === 'all' ? '' : `?g=${encodeURIComponent(javaVersion)}`}`
+  const modrinthSearchUrl = `https://modrinth.com/${({ All: 'discover', Mods: 'mods', Shaders: 'shaders', 'Resource packs': 'resourcepacks', Modpacks: 'modpacks', 'Data packs': 'datapacks', Maps: 'worlds', Plugins: 'plugins' } as Record<ExploreKind, string>)[exploreKind]}${javaVersion === 'all' ? '' : `?g=${encodeURIComponent(javaVersion)}`}`
 
   useEffect(() => {
     const controller = new AbortController()
