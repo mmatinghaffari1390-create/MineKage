@@ -85,3 +85,6 @@
 .rtl .label-bottom{left:auto;right:0;border-radius:12px 12px 12px 3px}
 .rtl .label-bottom:before{right:auto;left:-1px;clip-path:polygon(0 0,100% 0,0 100%);border-right:0;border-left:1px solid rgba(34,211,238,.3)}
 @media(max-width:760px){.rtl .label-top{left:0;right:auto}.rtl .label-bottom{right:0;left:auto}}
+
+/* Make live-catalogue compatibility guidance readable in both locales. */
+.catalogue-compatibility-hint{margin:12px 0 18px;padding:12px 14px;border:1px solid rgba(167,139,250,.2);border-inline-start:3px solid rgba(34,211,238,.65);border-radius:10px;background:rgba(20,16,35,.55);color:var(--muted,#b9b4c9);font-size:12px;line-height:1.85}
