@@ -243,6 +243,52 @@ create trigger on_auth_user_created
   after insert on auth.users
   for each row execute procedure public.handle_new_user();
 
+
+-- Prevent participants from rewriting the identities or forging friendship transitions.
+create or replace function public.guard_friendship_update()
+returns trigger
+language plpgsql
+security invoker
+set search_path = ''
+as $
+declare
+  actor uuid := (select auth.uid());
+begin
+  if new.requester_id is distinct from old.requester_id
+     or new.addressee_id is distinct from old.addressee_id then
+    raise exception 'Friendship participants cannot be changed';
+  end if;
+
+  if new.status is not distinct from old.status then
+    return new;
+  end if;
+
+  if old.status = 'pending'
+     and new.status in ('accepted', 'rejected')
+     and actor = old.addressee_id then
+    return new;
+  end if;
+
+  if old.status = 'pending'
+     and new.status = 'cancelled'
+     and actor = old.requester_id then
+    return new;
+  end if;
+
+  if old.status = 'accepted'
+     and new.status = 'cancelled'
+     and actor = old.requester_id then
+    return new;
+  end if;
+
+  raise exception 'Invalid friendship status transition';
+end;
+$;
+
+create trigger guard_friendship_update
+before update on public.friendships
+for each row execute procedure public.guard_friendship_update();
+
 -- Keep updated_at consistent on user-editable rows.
 create or replace function public.set_updated_at()
 returns trigger language plpgsql set search_path = '' as $$
