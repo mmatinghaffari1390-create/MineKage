@@ -39,7 +39,7 @@ const copy = {
     legal: 'Independent fan project. Not affiliated with Mojang or Microsoft.',
     search: 'Search worlds, mods, servers…', all: 'All', noResults: 'No matching items. Try another search.',
     status: 'Status provider not connected', soon: 'Not connected', detail: 'Browse server directory',
-    footerExplore: 'EXPLORE', footerCommunity: 'COMMUNITY', footerNote: 'Your next story is waiting.', liveCatalog: 'LIVE MODRINTH CATALOGUE', liveCatalogSub: 'Search community projects by type and Minecraft Java version.', loadingProjects: 'Loading projects…', loadError: 'The live catalogue could not load. Use the official catalogue link below.', liveCount: 'LIVE RESULTS', downloads: 'downloads',
+    footerExplore: 'EXPLORE', footerCommunity: 'COMMUNITY', footerNote: 'Your next story is waiting.', liveCatalog: 'LIVE MODRINTH CATALOGUE', liveCatalogSub: 'Search community projects by type and Minecraft Java version.', loadingProjects: 'Loading projects…', loadError: 'The live catalogue could not load. Use the official catalogue link below.', liveCount: 'LIVE RESULTS', retry: 'Try again', downloads: 'downloads',
   },
   fa: {
     eyebrow: 'دروازه باز است؛ قدم به ناشناخته بگذار',
@@ -67,7 +67,7 @@ const copy = {
     legal: 'پروژه مستقل هواداری؛ وابسته به Mojang یا Microsoft نیست.',
     search: 'جست‌وجوی دنیا، مود و سرور…', all: 'همه', noResults: 'موردی پیدا نشد؛ عبارت دیگری را امتحان کن.',
     status: 'سرویس وضعیت متصل نیست', soon: 'متصل نیست', detail: 'مشاهده فهرست سرورها',
-    footerExplore: 'اکتشاف', footerCommunity: 'جامعه', footerNote: 'داستان بعدی‌ات منتظر توست.', liveCatalog: 'کاتالوگ زنده مودرینث', liveCatalogSub: 'پروژه‌های جامعه را بر اساس نوع و نسخه جاوا جست‌وجو کن.', loadingProjects: 'در حال دریافت پروژه‌ها…', loadError: 'کاتالوگ زنده بارگذاری نشد؛ از پیوند کاتالوگ رسمی پایین استفاده کن.', liveCount: 'نتایج زنده', downloads: 'بار دانلود',
+    footerExplore: 'اکتشاف', footerCommunity: 'جامعه', footerNote: 'داستان بعدی‌ات منتظر توست.', liveCatalog: 'کاتالوگ زنده مودرینث', liveCatalogSub: 'پروژه‌های جامعه را بر اساس نوع و نسخه جاوا جست‌وجو کن.', loadingProjects: 'در حال دریافت پروژه‌ها…', loadError: 'کاتالوگ زنده بارگذاری نشد؛ از پیوند کاتالوگ رسمی پایین استفاده کن.', liveCount: 'نتایج زنده', retry: 'تلاش دوباره', downloads: 'بار دانلود',
   },
 } as const
 
@@ -116,6 +116,7 @@ function App() {
   const [liveProjects, setLiveProjects] = useState<LiveProject[]>([])
   const [projectsLoading, setProjectsLoading] = useState(false)
   const [projectsError, setProjectsError] = useState(false)
+  const [catalogueRetry, setCatalogueRetry] = useState(0)
   const [mobileOpen, setMobileOpen] = useState(false)
   const [accountNotice, setAccountNotice] = useState(false)
   const t = copy[locale]
@@ -166,7 +167,7 @@ function App() {
       .catch((error: unknown) => { if (error instanceof Error && error.name === 'AbortError') return; setProjectsError(true); setLiveProjects([]) })
       .finally(() => { if (!controller.signal.aborted) setProjectsLoading(false) })
     return () => controller.abort()
-  }, [exploreKind, javaVersion, modLoader, search])
+  }, [exploreKind, javaVersion, modLoader, search, catalogueRetry])
   const filteredDestinations = useMemo(() => destinations.filter((item) => {
     const matchKind = exploreKind === 'All' || item.kind === exploreKind
     const q = search.trim().toLowerCase()
@@ -258,7 +259,7 @@ function App() {
         <div className="section-note"><span className="note-mark">i</span><p>{t.trustSub}</p></div>
         <div className="live-catalogue">
           <div className="live-catalogue-heading"><div><div className="eyebrow"><span className="eyebrow-dot" />{t.liveCatalog}</div><h3>{t.liveCatalogSub}</h3></div><span className="live-catalogue-count" aria-live="polite" aria-atomic="true">{projectsLoading ? t.loadingProjects : liveProjects.length + ' ' + t.liveCount}</span></div>
-          {projectsError ? <div className="catalogue-message" role="status" aria-live="polite">{t.loadError}</div> : projectsLoading ? <div className="catalogue-message" role="status" aria-live="polite">{t.loadingProjects}</div> : liveProjects.length === 0 ? <div className="catalogue-message" role="status" aria-live="polite">{t.noResults}</div> : <div className="live-project-grid">
+          {projectsError ? <div className="catalogue-message" role="alert" aria-live="assertive">{t.loadError} <button className="button button-outline" onClick={() => setCatalogueRetry((attempt) => attempt + 1)}>{t.retry}</button></div> : projectsLoading ? <div className="catalogue-message" role="status" aria-live="polite">{t.loadingProjects}</div> : liveProjects.length === 0 ? <div className="catalogue-message" role="status" aria-live="polite">{t.noResults}</div> : <div className="live-project-grid">
             {liveProjects.map((project) => <a className="live-project-card" href={'https://modrinth.com/project/' + project.slug} target="_blank" rel="noreferrer" key={project.project_id}>
               <div className="live-project-top">{project.icon_url ? <img src={project.icon_url} alt="" loading="lazy" /> : <span className="live-project-fallback"><Blocks size={20} /></span>}<span className="live-project-type">{project.project_type}</span></div>
               <h4>{project.title}</h4><p>{project.description}</p>{project.categories?.length > 0 && <div className="project-tags" aria-label={locale === 'fa' ? 'دسته‌ها و لودرهای سازگار' : 'Categories and compatible loaders'}>{project.categories.slice(0, 4).map((category) => <span key={category}>{category.replace(/_/g, ' ')}</span>)}</div>}{project.versions?.length > 0 && <div className="project-tags project-versions" aria-label={locale === 'fa' ? 'نسخه‌های بازی پشتیبانی‌شده' : 'Supported Minecraft versions'}>{project.versions.slice(0, 4).map((version) => <span key={version}>{version}</span>)}{project.versions.length > 4 && <span>+{project.versions.length - 4}</span>}</div>}<div className="live-project-meta"><span>{project.author}</span><span>{new Intl.NumberFormat(locale === 'fa' ? 'fa-IR' : 'en-US', { notation: 'compact', maximumFractionDigits: 1 }).format(project.downloads)} {t.downloads}</span></div>
