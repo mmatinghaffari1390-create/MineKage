@@ -34,6 +34,17 @@ npm run build
 npm run preview
 ```
 
+## Database foundation (not applied)
+
+A first Supabase SQL migration is stored at `supabase/migrations/202610200001_initial_schema.sql`. It defines the initial account, profile, friendship, catalogue, role/permission, moderation-history, and audit-log tables with restrictive Row Level Security.
+
+**This migration has not been applied to any Supabase project and is not production-certified.** Before applying it:
+- Test it in a disposable Supabase project and review every policy with both anonymous and authenticated test accounts.
+- Bootstrap the first main administrator only after verifying the exact account identity, using a controlled database/admin procedure; the migration intentionally hard-codes no admin identity.
+- Implement audited server-side/RPC endpoints for role changes and moderation. The client is intentionally given no direct write policy for roles, restrictions, or audit logs.
+- Add automated database tests for privilege escalation, profile privacy, friendship state transitions, and audit immutability.
+- Review SQL and permissions independently before any production deployment.
+
 ## Environment and security
 
 1. Copy `.env.example` to a local `.env` file only when needed.
