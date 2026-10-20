@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import {
   ArrowDownRight, ArrowRight, ArrowUpRight, Blocks, Check,
   Compass, Gamepad2, Globe2, Gem, Heart, Menu, Search, ShieldCheck,
@@ -7,7 +7,7 @@ import {
 
 type Locale = 'en' | 'fa'
 type Section = 'home' | 'servers' | 'mods' | 'explore' | 'live' | 'community' | 'leaderboard'
-type ExploreKind = 'All' | 'Maps' | 'Shaders' | 'Resource packs' | 'Builds'
+type ExploreKind = 'All' | 'Performance' | 'More mods'
 
 const copy = {
   en: {
@@ -92,11 +92,27 @@ function App() {
   const [locale, setLocale] = useState<Locale>('en')
   const [section, setSection] = useState<Section>('home')
   const [search, setSearch] = useState('')
+  const searchInputRef = useRef<HTMLInputElement>(null)
   const [exploreKind, setExploreKind] = useState<ExploreKind>('All')
   const [mobileOpen, setMobileOpen] = useState(false)
   const [accountNotice, setAccountNotice] = useState(false)
   const t = copy[locale]
   const rtl = locale === 'fa'
+
+  useEffect(() => {
+    const handleShortcuts = (event: KeyboardEvent) => {
+      if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === 'k') {
+        event.preventDefault()
+        searchInputRef.current?.focus()
+      }
+      if (event.key === 'Escape') {
+        setMobileOpen(false)
+        setAccountNotice(false)
+      }
+    }
+    window.addEventListener('keydown', handleShortcuts)
+    return () => window.removeEventListener('keydown', handleShortcuts)
+  }, [])
   const navKeys: Section[] = ['home', 'servers', 'mods', 'explore', 'live', 'community', 'leaderboard']
   const kinds: ExploreKind[] = ['All', 'Performance', 'More mods']
 
@@ -167,9 +183,9 @@ function App() {
           <button className="text-link" onClick={() => { setExploreKind('All'); setSearch('') }}>{t.viewAll}<ArrowUpRight size={16} /></button>
         </div>
         <div className="discovery-toolbar">
-          <div className="search-box"><Search size={17} /><input value={search} onChange={(e) => setSearch(e.target.value)} placeholder={t.search} aria-label={t.search} /><kbd>⌘ K</kbd></div>
+          <div className="search-box"><Search size={17} /><input ref={searchInputRef} value={search} onChange={(e) => setSearch(e.target.value)} placeholder={t.search} aria-label={t.search} /><kbd>⌘ K</kbd></div>
           <div className="filter-pills" aria-label="Filter destination type">
-            {kinds.map((kind) => <button key={kind} className={exploreKind === kind ? 'filter-pill selected' : 'filter-pill'} onClick={() => setExploreKind(kind)}>{kind === 'All' ? t.all : kind}</button>)}
+            {kinds.map((kind) => <button key={kind} className={exploreKind === kind ? 'filter-pill selected' : 'filter-pill'} onClick={() => setExploreKind(kind)}>{kind === 'All' ? t.all : locale === 'fa' ? (kind === 'Performance' ? 'بهینه‌سازی' : 'مودهای بیشتر') : kind}</button>)}
           </div>
         </div>
         <div className="destination-grid">
