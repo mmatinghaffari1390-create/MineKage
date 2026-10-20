@@ -85,7 +85,7 @@ const destinations = [
   { id: 12, kind: 'Resource packs', name: 'Fresh Animations', sub: 'Entity animation pack · requires compatible setup', tag: 'ANIMATIONS', color: 'violet', icon: Sparkles, url: 'https://modrinth.com/resourcepack/fresh-animations' },
   { id: 13, kind: 'Modpacks', name: 'Modrinth Modpacks', sub: 'Browse curated packs and check required loaders', tag: 'MODPACKS', color: 'green', icon: Gem, url: 'https://modrinth.com/modpacks' },
   { id: 14, kind: 'Data packs', name: 'Modrinth Data Packs', sub: 'World features and gameplay tweaks', tag: 'DATA PACKS', color: 'pink', icon: Blocks, url: 'https://modrinth.com/datapacks' },
-  { id: 15, kind: 'Maps', name: 'Modrinth Worlds', sub: 'Community maps and adventure worlds', tag: 'WORLDS', color: 'blue', icon: Compass, url: 'https://modrinth.com/datapacks?f=project_type:world' },
+  { id: 15, kind: 'Maps', name: 'Modrinth Worlds', sub: 'Community maps and adventure worlds', tag: 'WORLDS', color: 'blue', icon: Compass, url: 'https://modrinth.com/worlds' },
   { id: 16, kind: 'Plugins', name: 'Modrinth Plugins', sub: 'Server add-ons · confirm Paper/loader compatibility', tag: 'SERVERS', color: 'violet', icon: Gamepad2, url: 'https://modrinth.com/plugins' },
   { id: 17, kind: 'Mods', name: 'Explore all mods', sub: 'Search projects by Minecraft version, loader and category', tag: 'CATALOGUE', color: 'green', icon: Compass, url: 'https://modrinth.com/mods' },
 ]
@@ -160,7 +160,7 @@ function App() {
       .then((response) => { if (!response.ok) throw new Error('Catalogue request failed'); return response.json() })
       .then((data: { hits?: LiveProject[] }) => setLiveProjects(Array.isArray(data.hits) ? data.hits : []))
       .catch((error: unknown) => { if (error instanceof Error && error.name === 'AbortError') return; setProjectsError(true); setLiveProjects([]) })
-      .finally(() => setProjectsLoading(false))
+      .finally(() => { if (!controller.signal.aborted) setProjectsLoading(false) })
     return () => controller.abort()
   }, [exploreKind, javaVersion, search])
   const filteredDestinations = useMemo(() => destinations.filter((item) => {
