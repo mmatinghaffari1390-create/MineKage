@@ -131,7 +131,7 @@ function App() {
   const navKeys: Section[] = ['home', 'servers', 'mods', 'explore', 'live', 'community', 'leaderboard']
   const kinds: ExploreKind[] = ['All', 'Mods', 'Shaders', 'Resource packs', 'Modpacks', 'Data packs', 'Maps', 'Plugins']
   const javaVersions: JavaVersion[] = ['all', '26.3', '26.2', '26.1.2', '26.1.1', '26.1', '1.21.11', '1.21.10', '1.21.8', '1.21.4', '1.21.1', '1.21', '1.20.4', '1.20.1', '1.19.4', '1.19.2', '1.18.2', '1.16.5', '1.12.2', '1.8.9']
-  const modrinthSearchUrl = `https://modrinth.com/discover/modsearch${javaVersion === 'all' ? '' : `?g=${encodeURIComponent(javaVersion)}`}`
+  const modrinthSearchUrl = `https://modrinth.com/discover/${({ All: 'modsearch', Mods: 'modsearch', Shaders: 'shadersearch', 'Resource packs': 'resourcepacksearch', Modpacks: 'modpacksearch', 'Data packs': 'datapacksearch', Maps: 'worldsearch', Plugins: 'pluginsearch' } as Record<ExploreKind, string>)[exploreKind]}${javaVersion === 'all' ? '' : `?g=${encodeURIComponent(javaVersion)}`}`
 
   const filteredDestinations = useMemo(() => destinations.filter((item) => {
     const matchKind = exploreKind === 'All' || item.kind === exploreKind
