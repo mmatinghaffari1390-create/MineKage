@@ -15,8 +15,8 @@ const checks = [
   ['profile policy uses visibility helper', /or public\.profile_is_visible\(user_id\)/i.test(hardening)],
   ['friendship trigger prevents participant identity changes', /new\.requester_id is distinct from old\.requester_id[\s\S]*?new\.addressee_id is distinct from old\.addressee_id/i.test(hardening)],
   ['friendship trigger rejects invalid transitions', /raise exception 'Invalid friendship status transition'/i.test(hardening)],
-  ['metadata tests cover audit log restrictions', /clients cannot write or delete audit logs directly/i.test(tests)),
-  ['metadata tests cover visibility policy', /profile read policy delegates visibility lookup to the helper function/i.test(tests)),
+  ['metadata tests cover audit log restrictions', /clients cannot write or delete audit logs directly/i.test(tests)],
+  ['metadata tests cover visibility policy', /profile read policy delegates visibility lookup to the helper function/i.test(tests)],
 ]
 
 for (const [label, passed] of checks) {
