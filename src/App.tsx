@@ -18,8 +18,8 @@ const copy = {
     explore: 'Explore the universe', browse: 'Browse servers', online: 'LIVE STATUS NOT CONNECTED',
     nav: ['Home', 'Servers', 'Mods', 'Explore', 'Live', 'Community', 'Leaderboard'],
     signal: 'BUILT FOR THE BLOCK-BY-BLOCK',
-    worlds: 'Worlds worth getting lost in',
-    worldsSub: 'Handpicked starting points for your next adventure.',
+    worlds: 'Tools worth adding to your world',
+    worldsSub: 'Browse real projects and open their official pages before installing.',
     servers: 'Find your next server',
     serversSub: 'Explore communities by play style, edition, and vibe.',
     mods: 'Upgrade your world',
@@ -46,8 +46,8 @@ const copy = {
     explore: 'گشت‌وگذار در دنیاها', browse: 'دیدن سرورها', online: 'وضعیت زنده متصل نیست',
     nav: ['خانه', 'سرورها', 'مودها', 'اکتشاف', 'پخش زنده', 'جامعه', 'رتبه‌بندی'],
     signal: 'ساخته‌شده برای ماجراجویی بلوک‌به‌بلوک',
-    worlds: 'دنیاهایی برای کشف‌کردن',
-    worldsSub: 'چند نقطه شروع برای ماجراجویی بعدی تو.',
+    worlds: 'ابزارهایی برای دنیای تو',
+    worldsSub: 'پروژه‌های واقعی را ببین و پیش از نصب، صفحه رسمی آن‌ها را بررسی کن.',
     servers: 'سرور بعدی‌ات را پیدا کن',
     serversSub: 'جامعه‌ها را بر اساس سبک بازی و نسخه بررسی کن.',
     mods: 'دنیایت را ارتقا بده',
@@ -69,10 +69,10 @@ const copy = {
 } as const
 
 const destinations = [
-  { id: 1, kind: 'Maps', name: 'The Lost Citadel', sub: 'Adventure map · source to be verified', tag: 'ADVENTURE', color: 'violet', icon: Compass },
-  { id: 2, kind: 'Shaders', name: 'Softlight Worlds', sub: 'Shader pack · compatibility pending', tag: 'VISUALS', color: 'blue', icon: Sparkles },
-  { id: 3, kind: 'Builds', name: 'Obsidian Observatory', sub: 'Build inspiration · creator credit pending', tag: 'BUILD', color: 'pink', icon: Blocks },
-  { id: 4, kind: 'Resource packs', name: 'Pixel Reforged', sub: 'Resource pack · license to be verified', tag: 'TEXTURES', color: 'green', icon: Gem },
+  { id: 1, kind: 'Performance', name: 'Sodium', sub: 'Rendering optimisation · official Modrinth project', tag: 'CLIENT', color: 'violet', icon: Sparkles, url: 'https://modrinth.com/mod/sodium' },
+  { id: 2, kind: 'Performance', name: 'Lithium', sub: 'Game logic optimisation · official Modrinth project', tag: 'CLIENT + SERVER', color: 'blue', icon: Zap, url: 'https://modrinth.com/mod/lithium' },
+  { id: 3, kind: 'Performance', name: 'FerriteCore', sub: 'Memory optimisation · official Modrinth project', tag: 'MEMORY', color: 'pink', icon: Gem, url: 'https://modrinth.com/mod/ferrite-core' },
+  { id: 4, kind: 'More mods', name: 'Explore Modrinth', sub: 'Browse projects, versions, loaders and licenses at the source.', tag: 'CATALOGUE', color: 'green', icon: Compass, url: 'https://modrinth.com/mods' },
 ]
 
 const serverTypes = [
@@ -98,7 +98,7 @@ function App() {
   const t = copy[locale]
   const rtl = locale === 'fa'
   const navKeys: Section[] = ['home', 'servers', 'mods', 'explore', 'live', 'community', 'leaderboard']
-  const kinds: ExploreKind[] = ['All', 'Maps', 'Shaders', 'Resource packs', 'Builds']
+  const kinds: ExploreKind[] = ['All', 'Performance', 'More mods']
 
   const filteredDestinations = useMemo(() => destinations.filter((item) => {
     const matchKind = exploreKind === 'All' || item.kind === exploreKind
@@ -181,7 +181,7 @@ function App() {
                 <div className="destination-glyph"><Icon size={38} strokeWidth={1.25} /></div>
                 <span className="destination-index">0{index + 1}</span><span className="destination-tag">{item.tag}</span>
               </div>
-              <div className="destination-info"><div><h3>{item.name}</h3><p>{item.sub}</p></div><button className="round-arrow" onClick={() => setAccountNotice(true)} aria-label={t.detail}><ArrowUpRight size={17} /></button></div>
+              <div className="destination-info"><div><h3>{item.name}</h3><p>{item.sub}</p></div><a className="round-arrow" href={item.url} target="_blank" rel="noreferrer" aria-label={`Open official page for ${item.name}`}><ArrowUpRight size={17} /></a></div>
             </article>
           })}
           {filteredDestinations.length === 0 && <div className="empty-state"><Search size={24} /><p>{t.noResults}</p></div>}
