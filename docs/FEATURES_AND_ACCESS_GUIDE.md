@@ -22,6 +22,7 @@ This document describes what the public website does today, how to use it, and w
 - Featured projects link to their official project pages.
 - Live results are requested from the public Modrinth API.
 - Results can be filtered by Minecraft Java release version. The version selector attempts to load the complete release list from Modrinth; a short fallback list is used if that endpoint is unavailable.
+- When the **Mods** category is selected, an additional loader filter is available for Fabric, Forge, NeoForge, and Quilt. This filter uses Modrinth category metadata, so always confirm the exact supported loader on the creator's project page.
 - Results display project title, author, description, icon when provided, project type, and download count returned by the API.
 - A loading state, empty state, and API error state are shown. If live results fail, use the official catalogue link.
 
