@@ -15,6 +15,10 @@ A bilingual, responsive React + TypeScript + Vite frontend for Minecraft communi
 - Leaderboard and live creator sections intentionally do not invent users, scores, or live stream data.
 - Account, profile, friendship, and moderation features are not active until a real backend is configured.
 
+## Full feature and access guide
+
+See [`docs/FEATURES_AND_ACCESS_GUIDE.md`](docs/FEATURES_AND_ACCESS_GUIDE.md) for current features, how to use the catalogue, mod/loader compatibility basics, backend setup, and release checklist.
+
 ## Run locally
 
 Requirements: Node.js 20+ recommended.
