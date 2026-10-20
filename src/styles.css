@@ -78,3 +78,10 @@
 @keyframes dialogue-drift{0%,100%{translate:0 0;box-shadow:0 8px 32px rgba(0,0,0,.22),inset 0 0 18px rgba(139,92,246,.07)}50%{translate:0 -5px;box-shadow:0 13px 38px rgba(60,35,105,.28),inset 0 0 22px rgba(139,92,246,.12)}}
 @media(max-width:760px){.floating-label{font-size:8px;max-width:72%;padding:10px 12px}.hero-subtitle{font-size:13px}}
 @media(prefers-reduced-motion:reduce){.floating-label{animation:none}}
+
+/* Keep cinematic callouts balanced when the interface switches to Persian RTL. */
+.rtl .label-top{right:auto;left:0;border-radius:12px 12px 3px 12px}
+.rtl .label-top:before{left:auto;right:-1px;clip-path:polygon(0 0,100% 0,100% 100%);border-left:0;border-right:1px solid rgba(185,157,255,.2)}
+.rtl .label-bottom{left:auto;right:0;border-radius:12px 12px 12px 3px}
+.rtl .label-bottom:before{right:auto;left:-1px;clip-path:polygon(0 0,100% 0,0 100%);border-right:0;border-left:1px solid rgba(34,211,238,.3)}
+@media(max-width:760px){.rtl .label-top{left:0;right:auto}.rtl .label-bottom{right:0;left:auto}}
