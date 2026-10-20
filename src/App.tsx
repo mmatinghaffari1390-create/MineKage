@@ -14,13 +14,13 @@ type ModLoader = 'all' | 'fabric' | 'forge' | 'neoforge' | 'quilt'
 
 const copy = {
   en: {
-    eyebrow: 'A COMMUNITY BEYOND THE ORDINARY',
-    titleA: 'Your next world',
-    titleB: 'starts here.',
-    subtitle: 'Find extraordinary servers, discover trusted mods, and meet the builders shaping the Minecraft universe.',
+    eyebrow: 'THE PORTAL IS OPEN — STEP INTO THE UNKNOWN',
+    titleA: 'Every great story',
+    titleB: 'begins with a block.',
+    subtitle: '“One more world.” Find your next server, power up your game, and meet the people building what comes next.',
     explore: 'Explore the universe', browse: 'Browse servers', online: 'LIVE STATUS NOT CONNECTED',
     nav: ['Home', 'Servers', 'Mods', 'Explore', 'Live', 'Community', 'Leaderboard'],
-    signal: 'BUILT FOR THE BLOCK-BY-BLOCK',
+    signal: 'YOUR ADVENTURE. YOUR RULES. YOUR WORLD.',
     worlds: 'Tools worth adding to your world',
     worldsSub: 'Browse real projects and open their official pages before installing.',
     servers: 'Find your next server',
@@ -39,16 +39,16 @@ const copy = {
     legal: 'Independent fan project. Not affiliated with Mojang or Microsoft.',
     search: 'Search worlds, mods, servers…', all: 'All', noResults: 'No matching items. Try another search.',
     status: 'Status provider not connected', soon: 'Not connected', detail: 'Browse server directory',
-    footerExplore: 'EXPLORE', footerCommunity: 'COMMUNITY', footerNote: 'Made for curious players.', liveCatalog: 'LIVE MODRINTH CATALOGUE', liveCatalogSub: 'Search community projects by type and Minecraft Java version.', loadingProjects: 'Loading projects…', loadError: 'The live catalogue could not load. Use the official catalogue link below.', liveCount: 'LIVE RESULTS', downloads: 'downloads',
+    footerExplore: 'EXPLORE', footerCommunity: 'COMMUNITY', footerNote: 'Your next story is waiting.', liveCatalog: 'LIVE MODRINTH CATALOGUE', liveCatalogSub: 'Search community projects by type and Minecraft Java version.', loadingProjects: 'Loading projects…', loadError: 'The live catalogue could not load. Use the official catalogue link below.', liveCount: 'LIVE RESULTS', downloads: 'downloads',
   },
   fa: {
-    eyebrow: 'جامعه‌ای فراتر از معمول',
-    titleA: 'دنیای بعدی تو',
-    titleB: 'از اینجا شروع می‌شود.',
-    subtitle: 'سرورهای خاص را پیدا کن، مودهای معتبر را بشناس و با سازندگان دنیای ماینکرفت آشنا شو.',
+    eyebrow: 'دروازه باز است؛ قدم به ناشناخته بگذار',
+    titleA: 'هر داستان بزرگی',
+    titleB: 'با یک بلوک شروع می‌شود.',
+    subtitle: '«فقط یک دنیای دیگر…» سرور بعدی‌ات را پیدا کن، بازی‌ات را ارتقا بده و با سازندگان دنیاهای تازه آشنا شو.',
     explore: 'گشت‌وگذار در دنیاها', browse: 'دیدن سرورها', online: 'وضعیت زنده متصل نیست',
     nav: ['خانه', 'سرورها', 'مودها', 'اکتشاف', 'پخش زنده', 'جامعه', 'رتبه‌بندی'],
-    signal: 'ساخته‌شده برای ماجراجویی بلوک‌به‌بلوک',
+    signal: 'ماجراجویی تو؛ قوانین تو؛ دنیای تو.',
     worlds: 'ابزارهایی برای دنیای تو',
     worldsSub: 'پروژه‌های واقعی را ببین و پیش از نصب، صفحه رسمی آن‌ها را بررسی کن.',
     servers: 'سرور بعدی‌ات را پیدا کن',
@@ -67,7 +67,7 @@ const copy = {
     legal: 'پروژه مستقل هواداری؛ وابسته به Mojang یا Microsoft نیست.',
     search: 'جست‌وجوی دنیا، مود و سرور…', all: 'همه', noResults: 'موردی پیدا نشد؛ عبارت دیگری را امتحان کن.',
     status: 'سرویس وضعیت متصل نیست', soon: 'متصل نیست', detail: 'مشاهده فهرست سرورها',
-    footerExplore: 'اکتشاف', footerCommunity: 'جامعه', footerNote: 'برای بازیکنان کنجکاو.', liveCatalog: 'کاتالوگ زنده مودرینث', liveCatalogSub: 'پروژه‌های جامعه را بر اساس نوع و نسخه جاوا جست‌وجو کن.', loadingProjects: 'در حال دریافت پروژه‌ها…', loadError: 'کاتالوگ زنده بارگذاری نشد؛ از پیوند کاتالوگ رسمی پایین استفاده کن.', liveCount: 'نتایج زنده', downloads: 'بار دانلود',
+    footerExplore: 'اکتشاف', footerCommunity: 'جامعه', footerNote: 'داستان بعدی‌ات منتظر توست.', liveCatalog: 'کاتالوگ زنده مودرینث', liveCatalogSub: 'پروژه‌های جامعه را بر اساس نوع و نسخه جاوا جست‌وجو کن.', loadingProjects: 'در حال دریافت پروژه‌ها…', loadError: 'کاتالوگ زنده بارگذاری نشد؛ از پیوند کاتالوگ رسمی پایین استفاده کن.', liveCount: 'نتایج زنده', downloads: 'بار دانلود',
   },
 } as const
 
@@ -215,17 +215,17 @@ function App() {
           <div className="crystal crystal-small crystal-right"><i /><b /><em /></div>
           <div className="crystal crystal-tiny crystal-top"><i /><b /><em /></div>
           <div className="art-scanline" />
-          <div className="art-caption"><span className="caption-line" /><span>DIMENSION 01</span><span className="caption-dot" /></div>
-          <div className="floating-label label-top"><Sparkles size={13} /> NEW WORLDS AWAIT</div>
-          <div className="floating-label label-bottom"><span className="mini-square" /> MADE FOR EXPLORERS</div>
+          <div className="art-caption"><span className="caption-line" /><span>{locale === 'fa' ? 'بُعد ۰۱ · دروازه ناشناخته' : 'DIMENSION 01 · THE UNKNOWN'}</span><span className="caption-dot" /></div>
+          <div className="floating-label label-top"><Sparkles size={13} /> {locale === 'fa' ? 'دنیاهای تازه صدایت می‌زنند…' : '“A NEW WORLD CALLS…”'}</div>
+          <div className="floating-label label-bottom"><span className="mini-square" /> {locale === 'fa' ? 'جرئت ورود داری؟' : '“BRAVE ENOUGH TO ENTER?”'}</div>
         </div>
-        <div className="hero-bottom"><span>01 / DISCOVER</span><span className="bottom-rule" /><span>CRAFTED FOR CURIOSITY</span><span className="bottom-cross">✳</span></div>
+        <div className="hero-bottom"><span>{locale === 'fa' ? '۰۱ / کشف کن' : '01 / ENTER THE UNKNOWN'}</span><span className="bottom-rule" /><span>{locale === 'fa' ? 'کنجکاوی، آغاز ماجراست' : 'CURIOSITY OPENS WORLDS'}</span><span className="bottom-cross">✳</span></div>
       </section>
 
       <section className="trust-strip section-wrap" aria-label="Site principles">
         <div><ShieldCheck size={17} /><span>{t.trusted}</span></div>
-        <div><Zap size={17} /><span>LIGHTWEIGHT BY DESIGN</span></div>
-        <div><Globe2 size={17} /><span>BUILT FOR BOTH EDITIONS</span></div>
+        <div><Zap size={17} /><span>{locale === 'fa' ? 'سبک و سریع؛ بی‌وقفه ماجراجویی کن' : 'LIGHT ON LOAD. BIG ON ADVENTURE.'}</span></div>
+        <div><Globe2 size={17} /><span>{locale === 'fa' ? 'جاوا یا بدراک؟ راهت را انتخاب کن' : 'JAVA OR BEDROCK? CHOOSE YOUR PATH.'}</span></div>
       </section>
 
       <section className="section-wrap content-section" id="explore">
