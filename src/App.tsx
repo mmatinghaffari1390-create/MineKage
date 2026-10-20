@@ -8,6 +8,7 @@ import {
 type Locale = 'en' | 'fa'
 type Section = 'home' | 'servers' | 'mods' | 'explore' | 'live' | 'community' | 'leaderboard'
 type ExploreKind = 'All' | 'Mods' | 'Shaders' | 'Resource packs' | 'Modpacks' | 'Data packs' | 'Maps' | 'Plugins'
+type LiveProject = { project_id: string; slug: string; title: string; description: string; project_type: string; downloads: number; icon_url?: string; author: string; versions: string[]; categories: string[] }
 type JavaVersion = 'all' | '26.3' | '26.2' | '26.1.2' | '26.1.1' | '26.1' | '1.21.11' | '1.21.10' | '1.21.8' | '1.21.4' | '1.21.1' | '1.21' | '1.20.4' | '1.20.1' | '1.19.4' | '1.19.2' | '1.18.2' | '1.16.5' | '1.12.2' | '1.8.9'
 
 const copy = {
@@ -37,7 +38,7 @@ const copy = {
     legal: 'Independent fan project. Not affiliated with Mojang or Microsoft.',
     search: 'Search worlds, mods, servers…', all: 'All', noResults: 'No matching items. Try another search.',
     status: 'Status provider not connected', soon: 'Not connected', detail: 'Open official page',
-    footerExplore: 'EXPLORE', footerCommunity: 'COMMUNITY', footerNote: 'Made for curious players.',
+    footerExplore: 'EXPLORE', footerCommunity: 'COMMUNITY', footerNote: 'Made for curious players.', liveCatalog: 'LIVE MODRINTH CATALOGUE', liveCatalogSub: 'Search community projects by type and Minecraft Java version.', loadingProjects: 'Loading projects…', loadError: 'The live catalogue could not load. Use the official catalogue link below.', liveCount: 'LIVE RESULTS', downloads: 'downloads',
   },
   fa: {
     eyebrow: 'جامعه‌ای فراتر از معمول',
@@ -65,7 +66,7 @@ const copy = {
     legal: 'پروژه مستقل هواداری؛ وابسته به Mojang یا Microsoft نیست.',
     search: 'جست‌وجوی دنیا، مود و سرور…', all: 'همه', noResults: 'موردی پیدا نشد؛ عبارت دیگری را امتحان کن.',
     status: 'سرویس وضعیت متصل نیست', soon: 'متصل نیست', detail: 'صفحه رسمی',
-    footerExplore: 'اکتشاف', footerCommunity: 'جامعه', footerNote: 'برای بازیکنان کنجکاو.',
+    footerExplore: 'اکتشاف', footerCommunity: 'جامعه', footerNote: 'برای بازیکنان کنجکاو.', liveCatalog: 'کاتالوگ زنده مودرینث', liveCatalogSub: 'پروژه‌های جامعه را بر اساس نوع و نسخه جاوا جست‌وجو کن.', loadingProjects: 'در حال دریافت پروژه‌ها…', loadError: 'کاتالوگ زنده بارگذاری نشد؛ از پیوند کاتالوگ رسمی پایین استفاده کن.', liveCount: 'نتایج زنده', downloads: 'بار دانلود',
   },
 } as const
 
@@ -109,6 +110,9 @@ function App() {
   const searchInputRef = useRef<HTMLInputElement>(null)
   const [exploreKind, setExploreKind] = useState<ExploreKind>('All')
   const [javaVersion, setJavaVersion] = useState<JavaVersion>('all')
+  const [liveProjects, setLiveProjects] = useState<LiveProject[]>([])
+  const [projectsLoading, setProjectsLoading] = useState(false)
+  const [projectsError, setProjectsError] = useState(false)
   const [mobileOpen, setMobileOpen] = useState(false)
   const [accountNotice, setAccountNotice] = useState(false)
   const t = copy[locale]
@@ -133,6 +137,21 @@ function App() {
   const javaVersions: JavaVersion[] = ['all', '26.3', '26.2', '26.1.2', '26.1.1', '26.1', '1.21.11', '1.21.10', '1.21.8', '1.21.4', '1.21.1', '1.21', '1.20.4', '1.20.1', '1.19.4', '1.19.2', '1.18.2', '1.16.5', '1.12.2', '1.8.9']
   const modrinthSearchUrl = `https://modrinth.com/discover/${({ All: 'modsearch', Mods: 'modsearch', Shaders: 'shadersearch', 'Resource packs': 'resourcepacksearch', Modpacks: 'modpacksearch', 'Data packs': 'datapacksearch', Maps: 'worldsearch', Plugins: 'pluginsearch' } as Record<ExploreKind, string>)[exploreKind]}${javaVersion === 'all' ? '' : `?g=${encodeURIComponent(javaVersion)}`}`
 
+  useEffect(() => {
+    const controller = new AbortController()
+    const projectType = ({ All: 'mod', Mods: 'mod', Shaders: 'shader', 'Resource packs': 'resourcepack', Modpacks: 'modpack', 'Data packs': 'datapack', Maps: 'world', Plugins: 'plugin' } as Record<ExploreKind, string>)[exploreKind]
+    const facets: string[][] = [['project_type:' + projectType]]
+    if (javaVersion !== 'all') facets.push(['versions:' + javaVersion])
+    const params = new URLSearchParams({ query: search.trim(), facets: JSON.stringify(facets), limit: '12', index: 'relevance' })
+    setProjectsLoading(true)
+    setProjectsError(false)
+    fetch('https://api.modrinth.com/v2/search?' + params.toString(), { signal: controller.signal })
+      .then((response) => { if (!response.ok) throw new Error('Catalogue request failed'); return response.json() })
+      .then((data: { hits?: LiveProject[] }) => setLiveProjects(Array.isArray(data.hits) ? data.hits : []))
+      .catch((error: unknown) => { if (error instanceof Error && error.name === 'AbortError') return; setProjectsError(true); setLiveProjects([]) })
+      .finally(() => setProjectsLoading(false))
+    return () => controller.abort()
+  }, [exploreKind, javaVersion, search])
   const filteredDestinations = useMemo(() => destinations.filter((item) => {
     const matchKind = exploreKind === 'All' || item.kind === exploreKind
     const q = search.trim().toLowerCase()
@@ -221,6 +240,16 @@ function App() {
           {filteredDestinations.length === 0 && <div className="empty-state"><Search size={24} /><p>{t.noResults}</p></div>}
         </div>
         <div className="section-note"><span className="note-mark">i</span><p>{t.trustSub}</p></div>
+        <div className="live-catalogue">
+          <div className="live-catalogue-heading"><div><div className="eyebrow"><span className="eyebrow-dot" />{t.liveCatalog}</div><h3>{t.liveCatalogSub}</h3></div><span className="live-catalogue-count">{projectsLoading ? t.loadingProjects : liveProjects.length + ' ' + t.liveCount}</span></div>
+          {projectsError ? <div className="catalogue-message">{t.loadError}</div> : projectsLoading ? <div className="catalogue-message">{t.loadingProjects}</div> : liveProjects.length === 0 ? <div className="catalogue-message">{t.noResults}</div> : <div className="live-project-grid">
+            {liveProjects.map((project) => <a className="live-project-card" href={'https://modrinth.com/' + project.project_type + '/' + project.slug} target="_blank" rel="noreferrer" key={project.project_id}>
+              <div className="live-project-top">{project.icon_url ? <img src={project.icon_url} alt="" loading="lazy" /> : <span className="live-project-fallback"><Blocks size={20} /></span>}<span className="live-project-type">{project.project_type}</span></div>
+              <h4>{project.title}</h4><p>{project.description}</p><div className="live-project-meta"><span>{project.author}</span><span>{new Intl.NumberFormat(locale === 'fa' ? 'fa-IR' : 'en-US', { notation: 'compact', maximumFractionDigits: 1 }).format(project.downloads)} {t.downloads}</span></div>
+            </a>)}
+          </div>}
+          <a className="text-link live-catalogue-link" href={modrinthSearchUrl} target="_blank" rel="noreferrer">{locale === 'fa' ? 'باز کردن کاتالوگ رسمی مودرینث' : 'Open the official Modrinth catalogue'}<ArrowUpRight size={16} /></a>
+        </div>
       </section>
 
       <section className="server-section" id="servers">
