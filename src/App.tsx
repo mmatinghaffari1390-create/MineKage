@@ -89,6 +89,18 @@ const destinations = [
   { id: 15, kind: 'Maps', name: 'Modrinth Worlds', sub: 'Community maps and adventure worlds', tag: 'WORLDS', color: 'blue', icon: Compass, url: 'https://modrinth.com/worlds' },
   { id: 16, kind: 'Plugins', name: 'Modrinth Plugins', sub: 'Server add-ons · confirm Paper/loader compatibility', tag: 'SERVERS', color: 'violet', icon: Gamepad2, url: 'https://modrinth.com/plugins' },
   { id: 17, kind: 'Mods', name: 'Explore all mods', sub: 'Search projects by Minecraft version, loader and category', tag: 'CATALOGUE', color: 'green', icon: Compass, url: 'https://modrinth.com/mods' },
+  { id: 18, kind: 'Mods', name: 'Fabric API', sub: 'Common library required by many Fabric mods', tag: 'LIBRARY', color: 'blue', icon: Blocks, url: 'https://modrinth.com/mod/fabric-api' },
+  { id: 19, kind: 'Mods', name: 'Mod Menu', sub: 'View and manage installed Fabric mods in-game', tag: 'UTILITY', color: 'violet', icon: Menu, url: 'https://modrinth.com/mod/modmenu' },
+  { id: 20, kind: 'Mods', name: 'Entity Culling', sub: 'Skip rendering hidden entities to help performance', tag: 'PERFORMANCE', color: 'green', icon: Zap, url: 'https://modrinth.com/mod/entityculling' },
+  { id: 21, kind: 'Mods', name: 'AppleSkin', sub: 'Show food and saturation information', tag: 'UTILITY', color: 'pink', icon: Heart, url: 'https://modrinth.com/mod/appleskin' },
+  { id: 22, kind: 'Mods', name: 'EMI', sub: 'Recipe and item lookup for compatible modded worlds', tag: 'UTILITY', color: 'blue', icon: Search, url: 'https://modrinth.com/mod/emi' },
+  { id: 23, kind: 'Mods', name: 'Waystones', sub: 'Placeable travel points for supported modded worlds', tag: 'EXPLORATION', color: 'violet', icon: Compass, url: 'https://modrinth.com/mod/waystones' },
+  { id: 24, kind: 'Mods', name: 'Create', sub: 'Mechanical contraptions and automation gameplay', tag: 'GAMEPLAY', color: 'green', icon: Blocks, url: 'https://modrinth.com/mod/create' },
+  { id: 25, kind: 'Mods', name: 'Distant Horizons', sub: 'Extended-distance terrain rendering; check system needs', tag: 'GRAPHICS', color: 'pink', icon: Sparkles, url: 'https://modrinth.com/mod/distanthorizons' },
+  { id: 26, kind: 'Resource packs', name: 'Stay True', sub: 'Vanilla-inspired texture refresh', tag: 'TEXTURES', color: 'green', icon: Blocks, url: 'https://modrinth.com/resourcepack/stay-true' },
+  { id: 27, kind: 'Resource packs', name: 'Visual Enchantments', sub: 'Clearer visual distinctions for enchanted gear', tag: 'VISUALS', color: 'violet', icon: Sparkles, url: 'https://modrinth.com/resourcepack/visual-enchantments' },
+  { id: 28, kind: 'Shaders', name: 'Photon', sub: 'Atmospheric shader pack; check GPU and loader support', tag: 'SHADERS', color: 'blue', icon: Sparkles, url: 'https://modrinth.com/shader/photon-shader' },
+  { id: 29, kind: 'Shaders', name: 'Sildur’s Vibrant Shaders', sub: 'Lighting and color options across supported setups', tag: 'SHADERS', color: 'pink', icon: Gem, url: 'https://modrinth.com/shader/sildurs-vibrant-shaders' },
 ]
 
 const serverTypes = [
