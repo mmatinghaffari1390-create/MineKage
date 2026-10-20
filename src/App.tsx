@@ -209,7 +209,13 @@ function App() {
 
       <section className="section-wrap mini-sections">
         <article className="mini-panel" id="live"><span className="mini-panel-icon"><Gamepad2 size={20} /></span><span className="mini-panel-label">LIVE / CREATORS</span><h3>{locale === 'fa' ? 'سازندگان را کشف کن' : 'Discover creators'}</h3><p>{locale === 'fa' ? 'وقتی منبع معتبر متصل شد، پخش‌های تأییدشده نمایش داده می‌شوند.' : 'Verified streams will appear when a trusted source is configured.'}</p><span className="coming-tag">{t.soon}</span></article>
-        <article className="mini-panel" id="leaderboard"><span className="mini-panel-icon"><Zap size={20} /></span><span className="mini-panel-label">LEADERBOARD / REAL DATA</span><h3>{locale === 'fa' ? 'پیشرفت واقعی' : 'Progress that counts'}</h3><p>{locale === 'fa' ? 'رتبه‌بندی پس از انتخاب معیار و اتصال داده واقعی فعال می‌شود.' : 'Rankings wait for a real metric and verified data source.'}</p><span className="coming-tag">{t.soon}</span></article>
+        <article className="mini-panel leaderboard-panel" id="leaderboard">
+          <div className="leaderboard-heading"><div><span className="mini-panel-label">LEADERBOARD / COMMUNITY</span><h3>{locale === 'fa' ? 'رده‌بندی بازیکنان' : 'Community leaderboard'}</h3><p>{locale === 'fa' ? 'جدول رتبه‌بندی آماده است؛ رتبه‌ها پس از اتصال داده معتبر بازیکنان نمایش داده می‌شوند.' : 'The leaderboard is ready; player rankings will appear once verified player data is connected.'}</p></div><span className="mini-panel-icon"><Zap size={20} /></span></div>
+          <div className="leaderboard-preview">
+            <div className="leaderboard-row leaderboard-header"><span>{locale === 'fa' ? 'رتبه' : 'RANK'}</span><span>{locale === 'fa' ? 'بازیکن' : 'PLAYER'}</span><span>{locale === 'fa' ? 'وضعیت' : 'STATUS'}</span></div>
+            <div className="leaderboard-empty"><span className="leaderboard-empty-icon"><Users size={20} /></span><div><strong>{locale === 'fa' ? 'داده بازیکنان هنوز متصل نیست' : 'Player data is not connected yet'}</strong><small>{locale === 'fa' ? 'برای جلوگیری از آمار ساختگی، تا اتصال منبع معتبر رتبه‌ای نمایش داده نمی‌شود.' : 'To avoid fabricated stats, rankings stay empty until a verified source is connected.'}</small></div><span className="data-waiting">{locale === 'fa' ? 'در انتظار داده' : 'AWAITING DATA'}</span></div>
+          </div>
+        </article>
       </section>
 
       <section className="section-wrap account-callout">
