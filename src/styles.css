@@ -39,3 +39,26 @@
 .rtl .version-tools label{letter-spacing:0}
 .rtl .version-browse{margin-left:0;margin-right:auto}
 @media(max-width:560px){.version-tools{align-items:stretch}.version-tools label{width:100%}.version-tools select,.version-browse{width:100%;margin:0!important;justify-content:center}}
+
+
+/* Live catalogue */
+.live-catalogue{margin-top:42px;padding:24px;border:1px solid var(--line);border-radius:18px;background:linear-gradient(145deg,rgba(30,22,47,.72),rgba(13,12,23,.82))}
+.live-catalogue-heading{display:flex;align-items:flex-end;justify-content:space-between;gap:18px;margin-bottom:20px}
+.live-catalogue-heading h3{max-width:620px;margin:10px 0 0;font-size:clamp(18px,2.5vw,25px);line-height:1.35}
+.live-catalogue-count{font:10px var(--mono);letter-spacing:.08em;color:#b9a7df;white-space:nowrap}
+.live-project-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.live-project-card{min-width:0;padding:15px;border:1px solid var(--line);border-radius:12px;background:rgba(8,8,15,.42);color:inherit;text-decoration:none;transition:transform .2s,border-color .2s,background .2s}
+.live-project-card:hover{transform:translateY(-3px);border-color:rgba(174,137,255,.48);background:rgba(35,25,52,.68)}
+.live-project-top{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:13px}
+.live-project-top img,.live-project-fallback{width:38px;height:38px;flex:0 0 38px;border-radius:9px;object-fit:cover;background:#21192f}
+.live-project-fallback{display:grid;place-items:center;color:#c8aaff}
+.live-project-type{font:9px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:#c2b2df}
+.live-project-card h4{font-size:15px;margin:0 0 7px;overflow-wrap:anywhere}
+.live-project-card p{font-size:12px;line-height:1.65;color:var(--muted);margin:0;min-height:58px;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.live-project-meta{display:flex;justify-content:space-between;gap:8px;align-items:center;border-top:1px solid var(--line);margin-top:14px;padding-top:11px;color:#b7a9c9;font-size:10px}
+.live-project-meta span{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.catalogue-message{padding:25px 15px;border:1px dashed var(--line);border-radius:12px;color:var(--muted);font-size:13px;text-align:center;line-height:1.7}
+.live-catalogue-link{margin-top:18px}
+.rtl .live-catalogue-count{letter-spacing:0}
+@media(max-width:850px){.live-project-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.live-catalogue{padding:18px}}
+@media(max-width:540px){.live-project-grid{grid-template-columns:1fr}.live-catalogue-heading{align-items:flex-start;flex-direction:column}.live-project-card p{min-height:0}}
