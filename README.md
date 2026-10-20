@@ -2,20 +2,18 @@
 
 **MineKage — Cinematic Minecraft Community Website**
 
-A bilingual, responsive React + TypeScript + Vite frontend for discovering Minecraft servers, mods, worlds, creators, and community members.
+A bilingual, responsive React + TypeScript + Vite frontend for Minecraft community discovery. The public site is deployed on GitHub Pages.
 
-## Current status
+## Live site and current state
 
-The `build/minekage-foundation` branch contains the first frontend foundation:
-- Cinematic dark violet / cyan visual system with an original CSS crystal/portal illustration.
-- English and Persian language toggle, including RTL layout.
-- Responsive navigation and mobile menu.
-- Search and category filtering for discovery cards.
-- Server-category cards with honest “status provider not connected” messaging.
-- Explicit placeholders for account, live stream, and leaderboard features that need trusted services or data.
-- Reduced-motion support and keyboard focus styles.
-
-**Not yet implemented:** real authentication, database, server status integration, real content catalogue, friendships, moderation backend, admin operations, and deployment. Placeholder cards are not verified recommendations or live information.
+- Live site: https://mmatinghaffari1390-create.github.io/MineKage/
+- Frontend checks and deployment run automatically on pushes to `main`.
+- English/Persian language switch with RTL layout.
+- Responsive navigation, keyboard focus styling, reduced-motion support, discovery search, category filters, and `Ctrl/⌘ + K` search shortcut.
+- Discovery cards link directly to official Modrinth project pages for Sodium, Lithium, and FerriteCore, plus the Modrinth catalogue. Check the project page for exact game version, loader, and compatibility before installing.
+- Server categories are examples of play styles, not verified server listings. No live server status is claimed.
+- Leaderboard and live creator sections intentionally do not invent users, scores, or live stream data.
+- Account, profile, friendship, and moderation features are not active until a real backend is configured.
 
 ## Run locally
 
@@ -26,45 +24,48 @@ npm install
 npm run dev
 ```
 
-Check types and production build:
+Validate before committing:
 
 ```bash
+npm run check:security
 npm run typecheck
 npm run build
 npm run preview
 ```
 
+## Deployment
+
+GitHub Actions builds and deploys the `main` branch to GitHub Pages. See the workflow status at:
+https://github.com/mmatinghaffari1390-create/MineKage/actions
+
 ## Database foundation (not applied)
 
-A first Supabase SQL migration is stored at `supabase/migrations/202610200001_initial_schema.sql`. It defines the initial account, profile, friendship, catalogue, role/permission, moderation-history, and audit-log tables with restrictive Row Level Security.
+SQL migrations are in `supabase/migrations/`. They define initial tables and Row Level Security (RLS) policies for profiles, settings, roles, friendships, catalogue content, user stats, restrictions, and audit logs.
 
-**This migration has not been applied to any Supabase project and is not production-certified.** Before applying it:
-- Test it in a disposable Supabase project and review every policy with both anonymous and authenticated test accounts.
-- Bootstrap the first main administrator only after verifying the exact account identity, using a controlled database/admin procedure; the migration intentionally hard-codes no admin identity.
-- Implement audited server-side/RPC endpoints for role changes and moderation. The client is intentionally given no direct write policy for roles, restrictions, or audit logs.
-- Add automated database tests for privilege escalation, profile privacy, friendship state transitions, and audit immutability.
-- Review SQL and permissions independently before any production deployment.
+**These migrations have not been applied to a Supabase project and are not production-certified.** Before applying them:
+- Use a disposable test project and independently review every policy with anonymous and authenticated accounts.
+- Run database tests for privilege escalation, profile privacy, friendship state transitions, and audit immutability.
+- Implement secure server-side/RPC operations for role changes and moderation. The browser must never be allowed to assign its own roles or write audit records.
+- Bootstrap the first main administrator only after verifying the exact account identity through a controlled procedure; no administrator identity is hard-coded.
+- Configure authentication providers, email delivery, account recovery, privacy policy, and account deletion, then test each flow.
+- Never place service-role keys, database passwords, or OAuth client secrets in frontend code or public repository files.
 
 ## Environment and security
 
-1. Copy `.env.example` to a local `.env` file only when needed.
-2. Browser environment variables must never contain service-role keys, database passwords, OAuth client secrets, or other privileged secrets.
-3. `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY` are public browser configuration values only; configure strict Supabase Row Level Security (RLS) before exposing user data.
-4. Admin and moderation privileges must be enforced on the server/database, not only by hiding UI controls.
-5. Never put secrets in commits, issue descriptions, screenshots, or client-side code.
-6. OAuth, email delivery, privacy policy, and account deletion flows require explicit configuration and testing before launch.
+Copy `.env.example` to a local `.env` only when needed. Browser variables such as `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY` are public configuration, not secrets. Exposing them is safe only when database permissions and RLS are configured correctly.
 
-## Suggested next implementation stages
+The static security check and TypeScript/build checks are useful safeguards, but they do not replace a professional security review or real database integration tests.
 
-1. Install dependencies and run typecheck/build.
-2. Review this UI and accessibility on mobile and desktop.
-3. Add Supabase schema and RLS policies, reviewed separately before applying to any live project.
-4. Implement authentication and account lifecycle.
-5. Implement friendships, curated content management, and reliable server status provider.
-6. Add permission-checked moderation and append-only audit trail.
-7. Add tests, privacy/legal content, and deployment workflow.
-8. Deploy only after explicit release approval and successful checks.
+## Roadmap
+
+1. Review the responsive site on mobile and desktop.
+2. Configure a dedicated Supabase project and review/apply migrations only after tests.
+3. Implement and test authentication, profile privacy, and account lifecycle.
+4. Implement friendship state changes, verified content management, and a trustworthy server-status source.
+5. Add permission-checked moderation, append-only audit records, and admin workflows.
+6. Populate the catalogue only with reviewed sources, version compatibility, license details, and creator attribution.
+7. Complete accessibility, privacy/legal review, and production checks before calling the site fully launched.
 
 ## License and affiliation
 
-MineKage is an independent fan/community project and is not affiliated with Mojang or Microsoft. Minecraft names and trademarks belong to their respective owners. Verify licensing and attribution for every third-party mod, map, shader, and resource pack before listing it.
+MineKage is an independent fan/community project and is not affiliated with Mojang or Microsoft. Minecraft names and trademarks belong to their respective owners. Verify licensing and attribution for every third-party project before listing or redistributing it.
