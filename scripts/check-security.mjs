@@ -10,7 +10,7 @@ const checks = [
   ['RLS enabled on roles', /alter table public\.user_roles enable row level security;/i.test(initial)],
   ['no client role write policy', /no client INSERT\/UPDATE\/DELETE policies for roles/i.test(initial)],
   ['server-side permission helper is defined', /create or replace function public\.has_permission/i.test(initial)],
-  ['new accounts are not granted admin by signup trigger', /insert into public\.user_roles\s*\(user_id, role\)\s*values\s*\(new\.id, 'member'\)/i.test(initial)],
+  ['new accounts are not granted admin by signup trigger', /insert into public\\.user_roles\\s*\\(user_id, role_key\\)\\s*values\\s*\\(new\\.id, 'member'\\)/i.test(initial)],
   ['profile visibility helper avoids settings RLS subquery in policy', /create or replace function public\.profile_is_visible\(target_user_id uuid\)[\s\S]*?security definer[\s\S]*?set search_path = ''/i.test(hardening)],
   ['profile policy uses visibility helper', /or public\.profile_is_visible\(user_id\)/i.test(hardening)],
   ['friendship trigger prevents participant identity changes', /new\.requester_id is distinct from old\.requester_id[\s\S]*?new\.addressee_id is distinct from old\.addressee_id/i.test(hardening)],
