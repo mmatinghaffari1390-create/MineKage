@@ -152,8 +152,9 @@ function App() {
   }, [])
   useEffect(() => {
     const controller = new AbortController()
-    const projectType = ({ All: 'mod', Mods: 'mod', Shaders: 'shader', 'Resource packs': 'resourcepack', Modpacks: 'modpack', 'Data packs': 'datapack', Maps: 'world', Plugins: 'plugin' } as Record<ExploreKind, string>)[exploreKind]
-    const facets: string[][] = [['project_type:' + projectType]]
+    const projectType = ({ Mods: 'mod', Shaders: 'shader', 'Resource packs': 'resourcepack', Modpacks: 'modpack', 'Data packs': 'datapack', Maps: 'world', Plugins: 'plugin' } as Partial<Record<ExploreKind, string>>)[exploreKind]
+    const facets: string[][] = []
+    if (projectType) facets.push(['project_type:' + projectType])
     if (javaVersion !== 'all') facets.push(['versions:' + javaVersion])
     if (exploreKind === 'Mods' && modLoader !== 'all') facets.push(['categories:' + modLoader])
     const params = new URLSearchParams({ query: search.trim(), facets: JSON.stringify(facets), limit: '12', index: 'relevance' })
