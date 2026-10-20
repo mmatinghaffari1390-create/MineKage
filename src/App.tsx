@@ -7,7 +7,7 @@ import {
 
 type Locale = 'en' | 'fa'
 type Section = 'home' | 'servers' | 'mods' | 'explore' | 'live' | 'community' | 'leaderboard'
-type ExploreKind = 'All' | 'Performance' | 'More mods'
+type ExploreKind = 'All' | 'Mods' | 'Shaders' | 'Resource packs' | 'Modpacks' | 'Data packs' | 'Maps' | 'Plugins'
 
 const copy = {
   en: {
@@ -69,10 +69,23 @@ const copy = {
 } as const
 
 const destinations = [
-  { id: 1, kind: 'Performance', name: 'Sodium', sub: 'Rendering optimisation · official Modrinth project', tag: 'CLIENT', color: 'violet', icon: Sparkles, url: 'https://modrinth.com/mod/sodium' },
-  { id: 2, kind: 'Performance', name: 'Lithium', sub: 'Game logic optimisation · official Modrinth project', tag: 'CLIENT + SERVER', color: 'blue', icon: Zap, url: 'https://modrinth.com/mod/lithium' },
-  { id: 3, kind: 'Performance', name: 'FerriteCore', sub: 'Memory optimisation · official Modrinth project', tag: 'MEMORY', color: 'pink', icon: Gem, url: 'https://modrinth.com/mod/ferrite-core' },
-  { id: 4, kind: 'More mods', name: 'Explore Modrinth', sub: 'Browse projects, versions, loaders and licenses at the source.', tag: 'CATALOGUE', color: 'green', icon: Compass, url: 'https://modrinth.com/mods' },
+  { id: 1, kind: 'Mods', name: 'Sodium', sub: 'Rendering optimisation · Fabric/Quilt project', tag: 'PERFORMANCE', color: 'violet', icon: Sparkles, url: 'https://modrinth.com/mod/sodium' },
+  { id: 2, kind: 'Mods', name: 'Lithium', sub: 'Game logic optimisation · Fabric project', tag: 'PERFORMANCE', color: 'blue', icon: Zap, url: 'https://modrinth.com/mod/lithium' },
+  { id: 3, kind: 'Mods', name: 'FerriteCore', sub: 'Memory optimisation · check loader and version', tag: 'MEMORY', color: 'pink', icon: Gem, url: 'https://modrinth.com/mod/ferrite-core' },
+  { id: 4, kind: 'Mods', name: 'Iris Shaders', sub: 'Shader support for compatible Minecraft setups', tag: 'GRAPHICS', color: 'green', icon: Sparkles, url: 'https://modrinth.com/mod/iris' },
+  { id: 5, kind: 'Mods', name: 'Xaero’s Minimap', sub: 'Minimap and waypoint navigation', tag: 'MAP', color: 'blue', icon: Compass, url: 'https://modrinth.com/mod/xaeros-minimap' },
+  { id: 6, kind: 'Mods', name: 'Jade', sub: 'Information overlay for blocks and entities', tag: 'UTILITY', color: 'pink', icon: Search, url: 'https://modrinth.com/mod/jade' },
+  { id: 7, kind: 'Shaders', name: 'Complementary Reimagined', sub: 'Popular shader pack · check GPU and version support', tag: 'SHADERS', color: 'violet', icon: Sparkles, url: 'https://modrinth.com/shader/complementary-reimagined' },
+  { id: 8, kind: 'Shaders', name: 'BSL Shaders', sub: 'Atmospheric lighting and visual effects', tag: 'SHADERS', color: 'blue', icon: Gem, url: 'https://modrinth.com/shader/bsl-shaders' },
+  { id: 9, kind: 'Shaders', name: 'MakeUp Ultra Fast', sub: 'Performance-focused shader options', tag: 'SHADERS', color: 'green', icon: Zap, url: 'https://modrinth.com/shader/makeup-ultra-fast-shaders' },
+  { id: 10, kind: 'Resource packs', name: 'Faithful 32x', sub: 'Higher-resolution textures with a familiar style', tag: 'TEXTURES', color: 'pink', icon: Blocks, url: 'https://modrinth.com/resourcepack/faithful-32x' },
+  { id: 11, kind: 'Resource packs', name: 'Bare Bones', sub: 'Clean, simplified textures', tag: 'TEXTURES', color: 'blue', icon: Blocks, url: 'https://modrinth.com/resourcepack/bare-bones' },
+  { id: 12, kind: 'Resource packs', name: 'Fresh Animations', sub: 'Entity animation pack · requires compatible setup', tag: 'ANIMATIONS', color: 'violet', icon: Sparkles, url: 'https://modrinth.com/resourcepack/fresh-animations' },
+  { id: 13, kind: 'Modpacks', name: 'Modrinth Modpacks', sub: 'Browse curated packs and check required loaders', tag: 'MODPACKS', color: 'green', icon: Gem, url: 'https://modrinth.com/modpacks' },
+  { id: 14, kind: 'Data packs', name: 'Modrinth Data Packs', sub: 'World features and gameplay tweaks', tag: 'DATA PACKS', color: 'pink', icon: Blocks, url: 'https://modrinth.com/datapacks' },
+  { id: 15, kind: 'Maps', name: 'Modrinth Worlds', sub: 'Community maps and adventure worlds', tag: 'WORLDS', color: 'blue', icon: Compass, url: 'https://modrinth.com/datapacks?f=project_type:world' },
+  { id: 16, kind: 'Plugins', name: 'Modrinth Plugins', sub: 'Server add-ons · confirm Paper/loader compatibility', tag: 'SERVERS', color: 'violet', icon: Gamepad2, url: 'https://modrinth.com/plugins' },
+  { id: 17, kind: 'Mods', name: 'Explore all mods', sub: 'Search projects by Minecraft version, loader and category', tag: 'CATALOGUE', color: 'green', icon: Compass, url: 'https://modrinth.com/mods' },
 ]
 
 const serverTypes = [
@@ -114,7 +127,7 @@ function App() {
     return () => window.removeEventListener('keydown', handleShortcuts)
   }, [])
   const navKeys: Section[] = ['home', 'servers', 'mods', 'explore', 'live', 'community', 'leaderboard']
-  const kinds: ExploreKind[] = ['All', 'Performance', 'More mods']
+  const kinds: ExploreKind[] = ['All', 'Mods', 'Shaders', 'Resource packs', 'Modpacks', 'Data packs', 'Maps', 'Plugins']
 
   const filteredDestinations = useMemo(() => destinations.filter((item) => {
     const matchKind = exploreKind === 'All' || item.kind === exploreKind
@@ -185,7 +198,7 @@ function App() {
         <div className="discovery-toolbar">
           <div className="search-box"><Search size={17} /><input ref={searchInputRef} value={search} onChange={(e) => setSearch(e.target.value)} placeholder={t.search} aria-label={t.search} /><kbd>⌘ K</kbd></div>
           <div className="filter-pills" aria-label="Filter destination type">
-            {kinds.map((kind) => <button key={kind} className={exploreKind === kind ? 'filter-pill selected' : 'filter-pill'} onClick={() => setExploreKind(kind)}>{kind === 'All' ? t.all : locale === 'fa' ? (kind === 'Performance' ? 'بهینه‌سازی' : 'مودهای بیشتر') : kind}</button>)}
+            {kinds.map((kind) => <button key={kind} className={exploreKind === kind ? 'filter-pill selected' : 'filter-pill'} onClick={() => setExploreKind(kind)}>{kind === 'All' ? t.all : locale === 'fa' ? ({ Mods: 'مودها', Shaders: 'شیدرها', 'Resource packs': 'ریسورس‌پک‌ها', Modpacks: 'مودپک‌ها', 'Data packs': 'دیتاپک‌ها', Maps: 'نقشه‌ها', Plugins: 'پلاگین‌ها' }[kind] ?? kind) : kind}</button>)}
           </div>
         </div>
         <div className="destination-grid">
