@@ -38,7 +38,7 @@ const copy = {
     signIn: 'Account setup required', footer: 'A community project for the love of Minecraft.',
     legal: 'Independent fan project. Not affiliated with Mojang or Microsoft.',
     search: 'Search worlds, mods, servers…', all: 'All', noResults: 'No matching items. Try another search.',
-    status: 'Status provider not connected', soon: 'Not connected', detail: 'Open official page',
+    status: 'Status provider not connected', soon: 'Not connected', detail: 'Browse server directory',
     footerExplore: 'EXPLORE', footerCommunity: 'COMMUNITY', footerNote: 'Made for curious players.', liveCatalog: 'LIVE MODRINTH CATALOGUE', liveCatalogSub: 'Search community projects by type and Minecraft Java version.', loadingProjects: 'Loading projects…', loadError: 'The live catalogue could not load. Use the official catalogue link below.', liveCount: 'LIVE RESULTS', downloads: 'downloads',
   },
   fa: {
@@ -66,7 +66,7 @@ const copy = {
     signIn: 'نیازمند تنظیم حساب', footer: 'پروژه‌ای اجتماعی برای عشق به ماینکرفت.',
     legal: 'پروژه مستقل هواداری؛ وابسته به Mojang یا Microsoft نیست.',
     search: 'جست‌وجوی دنیا، مود و سرور…', all: 'همه', noResults: 'موردی پیدا نشد؛ عبارت دیگری را امتحان کن.',
-    status: 'سرویس وضعیت متصل نیست', soon: 'متصل نیست', detail: 'صفحه رسمی',
+    status: 'سرویس وضعیت متصل نیست', soon: 'متصل نیست', detail: 'مشاهده فهرست سرورها',
     footerExplore: 'اکتشاف', footerCommunity: 'جامعه', footerNote: 'برای بازیکنان کنجکاو.', liveCatalog: 'کاتالوگ زنده مودرینث', liveCatalogSub: 'پروژه‌های جامعه را بر اساس نوع و نسخه جاوا جست‌وجو کن.', loadingProjects: 'در حال دریافت پروژه‌ها…', loadError: 'کاتالوگ زنده بارگذاری نشد؛ از پیوند کاتالوگ رسمی پایین استفاده کن.', liveCount: 'نتایج زنده', downloads: 'بار دانلود',
   },
 } as const
