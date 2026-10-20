@@ -8,6 +8,7 @@ import {
 type Locale = 'en' | 'fa'
 type Section = 'home' | 'servers' | 'mods' | 'explore' | 'live' | 'community' | 'leaderboard'
 type ExploreKind = 'All' | 'Mods' | 'Shaders' | 'Resource packs' | 'Modpacks' | 'Data packs' | 'Maps' | 'Plugins'
+type JavaVersion = 'all' | '26.3' | '26.2' | '26.1.2' | '26.1.1' | '26.1' | '1.21.11' | '1.21.10' | '1.21.8' | '1.21.4' | '1.21.1' | '1.21' | '1.20.4' | '1.20.1' | '1.19.4' | '1.19.2' | '1.18.2' | '1.16.5' | '1.12.2' | '1.8.9'
 
 const copy = {
   en: {
@@ -107,6 +108,7 @@ function App() {
   const [search, setSearch] = useState('')
   const searchInputRef = useRef<HTMLInputElement>(null)
   const [exploreKind, setExploreKind] = useState<ExploreKind>('All')
+  const [javaVersion, setJavaVersion] = useState<JavaVersion>('all')
   const [mobileOpen, setMobileOpen] = useState(false)
   const [accountNotice, setAccountNotice] = useState(false)
   const t = copy[locale]
@@ -128,6 +130,8 @@ function App() {
   }, [])
   const navKeys: Section[] = ['home', 'servers', 'mods', 'explore', 'live', 'community', 'leaderboard']
   const kinds: ExploreKind[] = ['All', 'Mods', 'Shaders', 'Resource packs', 'Modpacks', 'Data packs', 'Maps', 'Plugins']
+  const javaVersions: JavaVersion[] = ['all', '26.3', '26.2', '26.1.2', '26.1.1', '26.1', '1.21.11', '1.21.10', '1.21.8', '1.21.4', '1.21.1', '1.21', '1.20.4', '1.20.1', '1.19.4', '1.19.2', '1.18.2', '1.16.5', '1.12.2', '1.8.9']
+  const modrinthSearchUrl = `https://modrinth.com/discover/modsearch${javaVersion === 'all' ? '' : `?g=${encodeURIComponent(javaVersion)}`}`
 
   const filteredDestinations = useMemo(() => destinations.filter((item) => {
     const matchKind = exploreKind === 'All' || item.kind === exploreKind
@@ -200,6 +204,7 @@ function App() {
           <div className="filter-pills" aria-label="Filter destination type">
             {kinds.map((kind) => <button key={kind} className={exploreKind === kind ? 'filter-pill selected' : 'filter-pill'} onClick={() => setExploreKind(kind)}>{kind === 'All' ? t.all : locale === 'fa' ? ({ Mods: 'مودها', Shaders: 'شیدرها', 'Resource packs': 'ریسورس‌پک‌ها', Modpacks: 'مودپک‌ها', 'Data packs': 'دیتاپک‌ها', Maps: 'نقشه‌ها', Plugins: 'پلاگین‌ها' }[kind] ?? kind) : kind}</button>)}
           </div>
+          <div className="version-tools"><label htmlFor="java-version">{locale === 'fa' ? 'نسخه جاوا' : 'JAVA VERSION'}</label><select id="java-version" value={javaVersion} onChange={(e) => setJavaVersion(e.target.value as JavaVersion)}>{javaVersions.map((version) => <option key={version} value={version}>{version === 'all' ? (locale === 'fa' ? 'همه نسخه‌ها' : 'All versions') : version}</option>)}</select><a className="button button-outline version-browse" href={modrinthSearchUrl} target="_blank" rel="noreferrer">{locale === 'fa' ? 'جست‌وجوی همه پروژه‌ها' : 'Browse all projects'}<ArrowUpRight size={15} /></a></div>
         </div>
         <div className="destination-grid">
           {filteredDestinations.map((item, index) => {
