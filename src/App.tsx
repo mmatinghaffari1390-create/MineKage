@@ -101,6 +101,15 @@ const destinations = [
   { id: 27, kind: 'Resource packs', name: 'Visual Enchantments', sub: 'Clearer visual distinctions for enchanted gear', tag: 'VISUALS', color: 'violet', icon: Sparkles, url: 'https://modrinth.com/resourcepack/visual-enchantments' },
   { id: 28, kind: 'Shaders', name: 'Photon', sub: 'Atmospheric shader pack; check GPU and loader support', tag: 'SHADERS', color: 'blue', icon: Sparkles, url: 'https://modrinth.com/shader/photon-shader' },
   { id: 29, kind: 'Shaders', name: 'Sildur’s Vibrant Shaders', sub: 'Lighting and color options across supported setups', tag: 'SHADERS', color: 'pink', icon: Gem, url: 'https://modrinth.com/shader/sildurs-vibrant-shaders' },
+  { id: 30, kind: 'Mods', name: 'JEI (Just Enough Items)', sub: 'Browse items and recipes in supported modded setups', tag: 'UTILITY', color: 'blue', icon: Search, url: 'https://modrinth.com/mod/jei' },
+  { id: 31, kind: 'Mods', name: 'Xaero’s World Map', sub: 'Full-screen map companion for compatible Minecraft versions', tag: 'MAP', color: 'violet', icon: Compass, url: 'https://modrinth.com/mod/xaeros-world-map' },
+  { id: 32, kind: 'Mods', name: 'Simple Voice Chat', sub: 'Proximity voice chat; server setup and permissions may be required', tag: 'MULTIPLAYER', color: 'green', icon: Users, url: 'https://modrinth.com/plugin/simple-voice-chat' },
+  { id: 33, kind: 'Mods', name: 'Litematica', sub: 'Schematic planning tools for supported client setups', tag: 'BUILDING', color: 'pink', icon: Blocks, url: 'https://modrinth.com/mod/litematica' },
+  { id: 34, kind: 'Shaders', name: 'Bliss Shaders', sub: 'Atmospheric visuals; check hardware and version requirements', tag: 'SHADERS', color: 'violet', icon: Sparkles, url: 'https://modrinth.com/shader/bliss-shader' },
+  { id: 35, kind: 'Resource packs', name: 'Patrix', sub: 'Detailed visual style with version and resolution requirements', tag: 'TEXTURES', color: 'blue', icon: Blocks, url: 'https://modrinth.com/resourcepack/patrix' },
+  { id: 36, kind: 'Data packs', name: 'Terralith', sub: 'Overhauled Overworld terrain generation; review world setup notes', tag: 'WORLDGEN', color: 'green', icon: Compass, url: 'https://modrinth.com/datapack/terralith' },
+  { id: 37, kind: 'Mods', name: 'ReplayMod', sub: 'Record and replay gameplay on supported Minecraft versions', tag: 'CREATION', color: 'pink', icon: Gamepad2, url: 'https://modrinth.com/mod/replaymod' },
+  { id: 38, kind: 'Resource packs', name: 'Vanilla Tweaks', sub: 'Choose small vanilla-style resource and data pack tweaks', tag: 'CUSTOMIZATION', color: 'violet', icon: Blocks, url: 'https://vanillatweaks.net/' },
 ]
 
 const serverTypes = [
