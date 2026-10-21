@@ -2,7 +2,7 @@
 -- These metadata tests do not replace authenticated multi-user integration tests.
 begin;
 create extension if not exists pgtap with schema extensions;
-select plan(10);
+select plan(12);
 
 select ok(
   exists (select 1 from pg_trigger where tgname = 'guard_friendship_update' and not tgisinternal),
@@ -84,6 +84,21 @@ select ok(
 select ok(
   position('Friendship participants cannot be changed' in pg_get_functiondef('public.guard_friendship_update()'::regprocedure)) > 0,
   'friendship guard function includes participant protection'
+);
+
+select ok(
+  has_table_privilege('anon', 'public.servers', 'SELECT')
+  and has_table_privilege('anon', 'public.mods', 'SELECT')
+  and has_table_privilege('anon', 'public.explore_items', 'SELECT')
+  and has_table_privilege('anon', 'public.live_streams', 'SELECT'),
+  'anonymous users can read public catalogue tables'
+);
+
+select ok(
+  not has_table_privilege('anon', 'public.profiles', 'SELECT')
+  and not has_table_privilege('anon', 'public.user_settings', 'SELECT')
+  and not has_table_privilege('anon', 'public.user_roles', 'SELECT'),
+  'anonymous users cannot read private community tables'
 );
 
 select * from finish();
