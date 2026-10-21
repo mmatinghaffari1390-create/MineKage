@@ -2,7 +2,7 @@
 -- These metadata tests do not replace authenticated multi-user integration tests.
 begin;
 create extension if not exists pgtap with schema extensions;
-select plan(26);
+select plan(27);
 
 select ok(
   exists (select 1 from pg_trigger where tgname = 'guard_friendship_update' and not tgisinternal),
@@ -208,6 +208,11 @@ select ok(
   has_function_privilege('authenticated', 'public.has_permission(text)', 'EXECUTE')
   and has_function_privilege('authenticated', 'public.is_main_admin()', 'EXECUTE'),
   'authenticated role can execute authorization helper functions'
+);
+
+select ok(
+  position('The main admin account cannot be restricted' in pg_get_functiondef('public.admin_create_restriction(uuid,public.restriction_type,text,timestamp with time zone)'::regprocedure)) > 0,
+  'moderation RPC protects the main admin account from restrictions'
 );
 
 select * from finish();
