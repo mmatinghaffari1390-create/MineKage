@@ -25,8 +25,8 @@ jobs:
         uses: supabase/setup-cli@v1
         with:
           version: latest
-      - name: Start local Supabase
-        run: supabase start
+      - name: Start local Supabase (omit non-test services)
+        run: supabase start -x studio,imgproxy,edge-runtime,logflare,vector
       - name: Apply migrations to disposable local database
         run: supabase db reset
       - name: Run pgTAP database tests
