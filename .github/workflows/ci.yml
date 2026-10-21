@@ -2,7 +2,7 @@ name: Frontend checks
 
 on:
   push:
-    branches: ["main", "build/minekage-foundation"]
+    branches: ["main", "build/minekage-foundation", "fix/initial-migration-syntax"]
   pull_request:
     branches: ["main"]
 
