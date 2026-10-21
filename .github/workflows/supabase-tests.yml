@@ -26,6 +26,7 @@ jobs:
         with:
           version: latest
       - name: Start local Supabase (omit non-test services)
+        timeout-minutes: 10
         run: supabase start -x studio,imgproxy,edge-runtime,logflare,vector
       - name: Apply migrations to disposable local database
         run: supabase db reset
