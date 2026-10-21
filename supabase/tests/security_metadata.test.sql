@@ -83,7 +83,13 @@ select ok(
 );
 
 select ok(
-  position('AS $' in pg_get_functiondef('public.guard_friendship_update()'::regprocedure)) > 0,
+  position('as $function
+  'friendship guard function is installed with a dollar-quoted body'
+);
+
+select * from finish();
+rollback;
+ in lower(pg_get_functiondef('public.guard_friendship_update()'::regprocedure))) > 0,
   'friendship guard function is installed with a dollar-quoted body'
 );
 
