@@ -32,7 +32,9 @@ This document describes what the public website does today, how to use it, and w
 - A trusted status provider and reviewed server submissions are required before real listings can be advertised.
 
 ### Community, streams, and leaderboard
-- The public layout previews these future areas.
+- The public layout previews community profiles and leaderboard features; these still require a verified backend data source.
+- The Live / Creators panel now links to YouTube's live browsing page so visitors can discover Minecraft broadcasts without the site pretending to host or verify them.
+- This is a general YouTube discovery link, not a curated or verified MineKage stream feed. An official channel or trusted stream source must be configured before the site can show verified creator listings.
 - No fake creator streams, player profiles, achievements, scores, or online counts are displayed.
 - Actual accounts, profiles, friendships, moderation, and leaderboard data require the backend setup described below.
 
