@@ -497,13 +497,14 @@ create policy "public read verified published streams"
 on public.live_streams for select to anon
 using (is_published and verified_at is not null);
 
-grant select on public.servers, public.mods, public.explore_items, public.live_streams to anon;
-
 -- Explicitly do not grant anon access to community data.
 revoke all on public.profiles, public.user_settings, public.user_roles, public.role_permissions,
   public.friendships, public.user_stats, public.achievements, public.user_achievements,
   public.servers, public.mods, public.explore_items, public.live_streams,
   public.user_restrictions, public.admin_audit_logs from anon;
+
+-- Re-grant read-only access only to the public catalogue after the broad revoke.
+grant select on public.servers, public.mods, public.explore_items, public.live_streams to anon;
 
 grant select, update on public.profiles to authenticated;
 grant select, update on public.user_settings to authenticated;
