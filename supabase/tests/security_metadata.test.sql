@@ -2,7 +2,7 @@
 -- These metadata tests do not replace authenticated multi-user integration tests.
 begin;
 create extension if not exists pgtap with schema extensions;
-select plan(8);
+select plan(10);
 
 select ok(
   exists (select 1 from pg_trigger where tgname = 'guard_friendship_update' and not tgisinternal),
@@ -68,6 +68,23 @@ select ok(
       and qual like '%profile_is_visible%'
   ),
   'profile read policy delegates visibility lookup to the helper function'
+);
+
+select ok(
+  not exists (
+    select 1
+    from pg_class c
+    join pg_namespace n on n.oid = c.relnamespace
+    where n.nspname = 'public'
+      and c.relkind = 'r'
+      and not c.relrowsecurity
+  ),
+  'all ordinary public tables have row-level security enabled'
+);
+
+select ok(
+  position('AS $' in pg_get_functiondef('public.guard_friendship_update()'::regprocedure)) > 0,
+  'friendship guard function is installed with a dollar-quoted body'
 );
 
 select * from finish();
