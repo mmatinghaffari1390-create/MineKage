@@ -8,11 +8,11 @@ const tests = await readFile('supabase/tests/security_metadata.test.sql', 'utf8'
 const friendshipStart = initial.indexOf('create or replace function public.guard_friendship_update()')
 const friendshipEnd = initial.indexOf('create trigger guard_friendship_update', friendshipStart)
 const friendshipBody = initial.slice(friendshipStart, friendshipEnd)
-const tableNames = [...initial.matchAll(/create table public\\.([a-z_]+)/gi)].map(match => match[1])
+const tableNames = [...initial.matchAll(/create table public\.([a-z_]+)/gi)].map(match => match[1])
 
 const checks = [
-  ['initial friendship trigger uses valid dollar quoting', friendshipStart >= 0 && friendshipEnd > friendshipStart && /set search_path = ''\\s+as \\$\\$[\\s\\S]*?end;\\s+\\$\\$;/i.test(friendshipBody)],
-  ['all declared public tables enable RLS', tableNames.length > 0 && tableNames.every(name => new RegExp('alter table public\\\\.' + name + ' enable row level security;', 'i').test(initial))],
+  ['initial friendship trigger uses valid dollar quoting', friendshipStart >= 0 && friendshipEnd > friendshipStart && /set search_path = ''\s+as \$\$[\s\S]*?end;\s+\$\$;/i.test(friendshipBody)],
+  ['all declared public tables enable RLS', tableNames.length > 0 && tableNames.every(name => new RegExp('alter table public\\.' + name + ' enable row level security;', 'i').test(initial))],
   ['RLS enabled on profiles', /alter table public\.profiles enable row level security;/i.test(initial)],
   ['RLS enabled on roles', /alter table public\.user_roles enable row level security;/i.test(initial)],
   ['no client role write policy', /no client INSERT\/UPDATE\/DELETE policies for roles/i.test(initial)],
@@ -24,10 +24,12 @@ const checks = [
   ['friendship trigger rejects invalid transitions', /raise exception 'Invalid friendship status transition'/i.test(hardening)],
   ['metadata tests cover audit log restrictions', /clients cannot write or delete audit logs directly/i.test(tests)],
   ['metadata tests cover visibility policy', /profile read policy delegates visibility lookup to the helper function/i.test(tests)],
+  ['metadata tests check RLS across public tables', /all ordinary public tables have row-level security enabled/i.test(tests)],
+  ['metadata tests check installed friendship guard definition', /friendship guard function is installed with a dollar-quoted body/i.test(tests)],
 ]
 
 for (const [label, passed] of checks) {
-  assert.ok(passed, `Security static check failed: ${label}`)
-  console.log(`PASS ${label}`)
+  assert.ok(passed, \`Security static check failed: \${label}\`)
+  console.log(\`PASS \${label}\`)
 }
-console.log(`Passed ${checks.length} static security checks. These are not a substitute for PostgreSQL/Supabase integration tests.`)
+console.log(\`Passed \${checks.length} static security checks. These are not a substitute for PostgreSQL/Supabase integration tests.\`)
