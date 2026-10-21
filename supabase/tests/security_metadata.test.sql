@@ -2,7 +2,7 @@
 -- These metadata tests do not replace authenticated multi-user integration tests.
 begin;
 create extension if not exists pgtap with schema extensions;
-select plan(12);
+select plan(16);
 
 select ok(
   exists (select 1 from pg_trigger where tgname = 'guard_friendship_update' and not tgisinternal),
@@ -99,6 +99,38 @@ select ok(
   and not has_table_privilege('anon', 'public.user_settings', 'SELECT')
   and not has_table_privilege('anon', 'public.user_roles', 'SELECT'),
   'anonymous users cannot read private community tables'
+);
+
+
+select ok(
+  exists (select 1 from pg_policies where schemaname = 'public' and tablename = 'servers'
+    and policyname = 'public read published servers' and roles @> array['anon']::name[]
+    and qual like '%is_published%'),
+  'anonymous server catalogue policy restricts reads to published entries'
+);
+
+select ok(
+  exists (select 1 from pg_policies where schemaname = 'public' and tablename = 'mods'
+    and policyname = 'public read published mods' and roles @> array['anon']::name[]
+    and qual like '%is_published%')
+  and exists (select 1 from pg_policies where schemaname = 'public' and tablename = 'explore_items'
+    and policyname = 'public read published explore items' and roles @> array['anon']::name[]
+    and qual like '%is_published%'),
+  'anonymous mod and explore catalogues restrict reads to published entries'
+);
+
+select ok(
+  exists (select 1 from pg_policies where schemaname = 'public' and tablename = 'live_streams'
+    and policyname = 'public read verified published streams' and roles @> array['anon']::name[]
+    and qual like '%verified_at%'),
+  'anonymous live stream catalogue requires verified published entries'
+);
+
+select ok(
+  not exists (select 1 from pg_policies where schemaname = 'public'
+    and tablename in ('profiles', 'user_settings', 'user_roles')
+    and roles @> array['anon']::name[]),
+  'no anonymous RLS policies expose private community tables'
 );
 
 select * from finish();
