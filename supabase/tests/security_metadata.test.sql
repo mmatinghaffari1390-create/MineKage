@@ -2,7 +2,7 @@
 -- These metadata tests do not replace authenticated multi-user integration tests.
 begin;
 create extension if not exists pgtap with schema extensions;
-select plan(20);
+select plan(26);
 
 select ok(
   exists (select 1 from pg_trigger where tgname = 'guard_friendship_update' and not tgisinternal),
@@ -161,6 +161,53 @@ select ok(
   and not has_table_privilege('anon', 'public.user_roles', 'SELECT')
   and not has_table_privilege('anon', 'public.user_settings', 'SELECT'),
   'anonymous grants exclude role assignments, permission matrix, and private settings'
+);
+
+
+select ok(
+  to_regprocedure('public.admin_set_user_role(uuid,text)') is not null
+  and to_regprocedure('public.admin_set_role_permission(text,text,boolean)') is not null
+  and to_regprocedure('public.admin_create_restriction(uuid,public.restriction_type,text,timestamp with time zone)') is not null
+  and to_regprocedure('public.admin_revoke_restriction(uuid,text)') is not null,
+  'all four audited admin RPC signatures exist'
+);
+
+select ok(
+  not has_function_privilege('anon', 'public.admin_set_user_role(uuid,text)', 'EXECUTE')
+  and not has_function_privilege('anon', 'public.admin_set_role_permission(text,text,boolean)', 'EXECUTE')
+  and not has_function_privilege('anon', 'public.admin_create_restriction(uuid,public.restriction_type,text,timestamp with time zone)', 'EXECUTE')
+  and not has_function_privilege('anon', 'public.admin_revoke_restriction(uuid,text)', 'EXECUTE'),
+  'anonymous role cannot execute admin RPCs'
+);
+
+select ok(
+  has_function_privilege('authenticated', 'public.admin_set_user_role(uuid,text)', 'EXECUTE')
+  and has_function_privilege('authenticated', 'public.admin_set_role_permission(text,text,boolean)', 'EXECUTE')
+  and has_function_privilege('authenticated', 'public.admin_create_restriction(uuid,public.restriction_type,text,timestamp with time zone)', 'EXECUTE')
+  and has_function_privilege('authenticated', 'public.admin_revoke_restriction(uuid,text)', 'EXECUTE'),
+  'authenticated role can invoke guarded admin RPCs'
+);
+
+select ok(
+  (select count(*) = 4 from pg_proc p
+   join pg_namespace n on n.oid = p.pronamespace
+   where n.nspname = 'public'
+     and p.proname in ('admin_set_user_role','admin_set_role_permission','admin_create_restriction','admin_revoke_restriction')
+     and p.prosecdef
+     and coalesce(array_to_string(p.proconfig, ','), '') like '%search_path=%'),
+  'admin RPCs are SECURITY DEFINER with an explicit search_path'
+);
+
+select ok(
+  not has_function_privilege('anon', 'public.has_permission(text)', 'EXECUTE')
+  and not has_function_privilege('anon', 'public.is_main_admin()', 'EXECUTE'),
+  'anonymous role cannot execute authorization helper functions'
+);
+
+select ok(
+  has_function_privilege('authenticated', 'public.has_permission(text)', 'EXECUTE')
+  and has_function_privilege('authenticated', 'public.is_main_admin()', 'EXECUTE'),
+  'authenticated role can execute authorization helper functions'
 );
 
 select * from finish();
