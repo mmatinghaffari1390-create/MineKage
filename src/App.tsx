@@ -38,7 +38,7 @@ const copy = {
     signIn: 'Account setup required', footer: 'A community project for the love of Minecraft.',
     legal: 'Independent fan project. Not affiliated with Mojang or Microsoft.',
     search: 'Search worlds, mods, servers…', all: 'All', noResults: 'No matching items. Try another search.',
-    status: 'Status provider not connected', soon: 'Not connected', detail: 'Browse server directory',
+    status: 'Status provider not connected', soon: 'Backend setup required', detail: 'Browse server directory',
     footerExplore: 'EXPLORE', footerCommunity: 'COMMUNITY', footerNote: 'Your next story is waiting.', liveCatalog: 'LIVE MODRINTH CATALOGUE', liveCatalogSub: 'Search community projects by type and Minecraft Java version.', loadingProjects: 'Loading projects…', loadError: 'The live catalogue could not load. Use the official catalogue link below.', liveCount: 'LIVE RESULTS', retry: 'Try again', downloads: 'downloads', compatibilityHint: 'Compatibility tip: filter by Minecraft version and, for mods, by loader. Before installing, open the project page and check its supported versions, dependencies, and installation notes.', installGuide: 'Read the installation guide',
   },
   fa: {
@@ -66,7 +66,7 @@ const copy = {
     signIn: 'نیازمند تنظیم حساب', footer: 'پروژه‌ای اجتماعی برای عشق به ماینکرفت.',
     legal: 'پروژه مستقل هواداری؛ وابسته به Mojang یا Microsoft نیست.',
     search: 'جست‌وجوی دنیا، مود و سرور…', all: 'همه', noResults: 'موردی پیدا نشد؛ عبارت دیگری را امتحان کن.',
-    status: 'سرویس وضعیت متصل نیست', soon: 'متصل نیست', detail: 'مشاهده فهرست سرورها',
+    status: 'سرویس وضعیت متصل نیست', soon: 'نیازمند راه‌اندازی سرویس پشتیبان', detail: 'مشاهده فهرست سرورها',
     footerExplore: 'اکتشاف', footerCommunity: 'جامعه', footerNote: 'داستان بعدی‌ات منتظر توست.', liveCatalog: 'کاتالوگ زنده مودرینث', liveCatalogSub: 'پروژه‌های جامعه را بر اساس نوع و نسخه جاوا جست‌وجو کن.', loadingProjects: 'در حال دریافت پروژه‌ها…', loadError: 'کاتالوگ زنده بارگذاری نشد؛ از پیوند کاتالوگ رسمی پایین استفاده کن.', liveCount: 'نتایج زنده', retry: 'تلاش دوباره', downloads: 'بار دانلود', compatibilityHint: 'نکته سازگاری: نسخه ماینکرفت را فیلتر کن و برای مودها لودر را هم انتخاب کن. پیش از نصب، نسخه‌های پشتیبانی‌شده، وابستگی‌ها و راهنمای نصب را در صفحه رسمی پروژه بررسی کن.', installGuide: 'راهنمای نصب و رفع مشکل',
   },
 } as const
