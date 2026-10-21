@@ -19,6 +19,12 @@ begin
   if target_user = actor then
     raise exception 'Self role changes are not allowed' using errcode = '42501';
   end if;
+  if exists (
+    select 1 from public.user_roles ur
+    where ur.user_id = target_user and ur.role_key = 'main_admin'
+  ) then
+    raise exception 'The main admin role cannot be changed through this RPC' using errcode = '42501';
+  end if;
   if not exists (select 1 from auth.users u where u.id = target_user) then
     raise exception 'Target user not found' using errcode = '22023';
   end if;
