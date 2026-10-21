@@ -91,6 +91,12 @@ begin
   if not exists (select 1 from auth.users u where u.id = target_user) then
     raise exception 'Target user not found' using errcode = '22023';
   end if;
+  if exists (
+    select 1 from public.user_roles ur
+    where ur.user_id = target_user and ur.role_key = 'main_admin'
+  ) then
+    raise exception 'The main admin account cannot be restricted' using errcode = '42501';
+  end if;
 
   insert into public.user_restrictions (user_id, restriction, reason, ends_at, created_by)
   values (target_user, restriction_kind, trim(reason_text), restriction_ends_at, actor)
