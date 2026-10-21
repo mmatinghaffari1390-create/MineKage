@@ -49,7 +49,7 @@ select ok(
   exists (
     select 1 from pg_policies
     where schemaname = 'public' and tablename = 'profiles'
-      and cmd = 'UPDATE' and roles @> array['authenticated']
+      and cmd = 'UPDATE' and roles @> array['authenticated']::name[]
   ),
   'authenticated profile update policy exists'
 );
