@@ -5,7 +5,14 @@ const initial = await readFile('supabase/migrations/202610200001_initial_schema.
 const hardening = await readFile('supabase/migrations/202610200002_security_hardening.sql', 'utf8')
 const tests = await readFile('supabase/tests/security_metadata.test.sql', 'utf8')
 
+const friendshipStart = initial.indexOf('create or replace function public.guard_friendship_update()')
+const friendshipEnd = initial.indexOf('create trigger guard_friendship_update', friendshipStart)
+const friendshipBody = initial.slice(friendshipStart, friendshipEnd)
+const tableNames = [...initial.matchAll(/create table public\\.([a-z_]+)/gi)].map(match => match[1])
+
 const checks = [
+  ['initial friendship trigger uses valid dollar quoting', friendshipStart >= 0 && friendshipEnd > friendshipStart && /set search_path = ''\\s+as \\$\\$[\\s\\S]*?end;\\s+\\$\\$;/i.test(friendshipBody)],
+  ['all declared public tables enable RLS', tableNames.length > 0 && tableNames.every(name => new RegExp('alter table public\\\\.' + name + ' enable row level security;', 'i').test(initial))],
   ['RLS enabled on profiles', /alter table public\.profiles enable row level security;/i.test(initial)],
   ['RLS enabled on roles', /alter table public\.user_roles enable row level security;/i.test(initial)],
   ['no client role write policy', /no client INSERT\/UPDATE\/DELETE policies for roles/i.test(initial)],
