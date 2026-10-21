@@ -250,7 +250,7 @@ returns trigger
 language plpgsql
 security invoker
 set search_path = ''
-as $
+as $$
 declare
   actor uuid := (select auth.uid());
 begin
@@ -283,8 +283,7 @@ begin
 
   raise exception 'Invalid friendship status transition';
 end;
-$;
-
+$$;
 create trigger guard_friendship_update
 before update on public.friendships
 for each row execute procedure public.guard_friendship_update();
