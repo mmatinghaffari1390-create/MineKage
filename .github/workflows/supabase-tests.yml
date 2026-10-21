@@ -3,17 +3,15 @@ name: Supabase database tests
 on:
   pull_request:
     branches: ["main"]
-  push:
-    branches: ["fix/initial-migration-syntax"]
   workflow_dispatch:
 
 permissions:
   contents: read
 
-# Use the same key for push and pull_request events from the same head branch.
-# This prevents duplicate database containers from running for one commit.
+# The pull_request event covers commits pushed to the open PR; avoid running a
+# second copy of the same database suite from a branch push event.
 concurrency:
-  group: supabase-tests-${{ github.event.pull_request.head.ref || github.ref_name }}
+  group: supabase-tests-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: true
 
 jobs:
