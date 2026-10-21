@@ -14,6 +14,8 @@ concurrency:
 
 jobs:
   build:
+    # Manual runs are permitted only from main; never publish an arbitrary feature branch.
+    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -40,6 +42,8 @@ jobs:
           path: dist
 
   deploy:
+    # Keep a second guard at the deployment job, even if build dependencies change.
+    if: github.ref == 'refs/heads/main'
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
