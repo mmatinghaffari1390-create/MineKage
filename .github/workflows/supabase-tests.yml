@@ -1,0 +1,29 @@
+name: Supabase database tests
+
+on:
+  pull_request:
+    branches: ["main"]
+  push:
+    branches: ["fix/initial-migration-syntax"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  database:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+      - name: Set up Supabase CLI
+        uses: supabase/setup-cli@v1
+        with:
+          version: latest
+      - name: Start local Supabase
+        run: supabase start
+      - name: Apply migrations to disposable local database
+        run: supabase db reset
+      - name: Run pgTAP database tests
+        run: supabase test db
