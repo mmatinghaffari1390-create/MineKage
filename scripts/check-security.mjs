@@ -26,6 +26,8 @@ const checks = [
   ['metadata tests cover visibility policy', /profile read policy delegates visibility lookup to the helper function/i.test(tests)],
   ['metadata tests check RLS across public tables', /all ordinary public tables have row-level security enabled/i.test(tests)],
   ['metadata tests inspect the friendship guard definition', /friendship guard function includes participant protection/i.test(tests)],
+  ['anonymous catalogue grants occur after broad anonymous revoke', /revoke all on public\\.profiles[\\s\\S]*?from anon;[\\s\\S]*?grant select on public\\.servers, public\\.mods, public\\.explore_items, public\\.live_streams to anon;/i.test(initial)],
+  ['metadata tests cover anonymous catalogue access and private community tables', /anonymous users can read public catalogue tables/i.test(tests) && /anonymous users cannot read private community tables/i.test(tests)],
 ]
 
 for (const [label, passed] of checks) {
