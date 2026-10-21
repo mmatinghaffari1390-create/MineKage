@@ -18,6 +18,7 @@ Use this checklist before calling the site production-ready. A checked item must
 ## Backend and account security
 - [ ] Apply migrations to the intended Supabase project only after reviewing the target project and backup/recovery plan.
 - [ ] Run RLS tests for anonymous, authenticated, owner, moderator, and administrator access.
+- [ ] Verify anonymous users can read only the intended public catalogue tables and cannot read profiles, user settings, roles, restrictions, friendships, or audit logs.
 - [ ] Verify role assignment cannot be performed by ordinary users and privileged actions are audited.
 - [ ] Configure email verification, password recovery, allowed redirect URLs, and provider settings in Supabase Auth.
 - [ ] Keep service-role keys and other secrets out of source control and all `VITE_*` client variables.
