@@ -10,9 +10,10 @@ on:
 permissions:
   contents: read
 
-# Avoid spending runner time on superseded commits from the same branch/PR.
+# Use the same key for push and pull_request events from the same head branch.
+# This prevents duplicate database containers from running for one commit.
 concurrency:
-  group: supabase-tests-${{ github.head_ref || github.ref }}
+  group: supabase-tests-${{ github.event.pull_request.head.ref || github.ref_name }}
   cancel-in-progress: true
 
 jobs:
