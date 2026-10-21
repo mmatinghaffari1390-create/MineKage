@@ -2,7 +2,7 @@
 -- These metadata tests do not replace authenticated multi-user integration tests.
 begin;
 create extension if not exists pgtap with schema extensions;
-select plan(16);
+select plan(20);
 
 select ok(
   exists (select 1 from pg_trigger where tgname = 'guard_friendship_update' and not tgisinternal),
@@ -131,6 +131,36 @@ select ok(
     and tablename in ('profiles', 'user_settings', 'user_roles')
     and roles @> array['anon']::name[]),
   'no anonymous RLS policies expose private community tables'
+);
+
+
+select ok(
+  not has_table_privilege('anon', 'public.friendships', 'SELECT')
+  and not has_table_privilege('anon', 'public.user_stats', 'SELECT')
+  and not has_table_privilege('anon', 'public.user_achievements', 'SELECT')
+  and not has_table_privilege('anon', 'public.user_restrictions', 'SELECT')
+  and not has_table_privilege('anon', 'public.admin_audit_logs', 'SELECT'),
+  'anonymous users cannot read social, moderation, statistics, or audit tables'
+);
+
+select ok(
+  not has_function_privilege('anon', 'public.profile_is_visible(uuid)', 'EXECUTE')
+  and has_function_privilege('authenticated', 'public.profile_is_visible(uuid)', 'EXECUTE'),
+  'profile visibility helper is executable only by signed-in users'
+);
+
+select ok(
+  exists (select 1 from public.role_permissions where role_key = 'admin' and permission_key = 'content.manage' and allowed = false)
+  and exists (select 1 from public.role_permissions where role_key = 'admin' and permission_key = 'roles.manage' and allowed = false)
+  and exists (select 1 from public.role_permissions where role_key = 'main_admin' and permission_key = 'roles.manage' and allowed = true),
+  'default role matrix keeps sensitive privileges limited to the main admin'
+);
+
+select ok(
+  not has_table_privilege('anon', 'public.role_permissions', 'SELECT')
+  and not has_table_privilege('anon', 'public.user_roles', 'SELECT')
+  and not has_table_privilege('anon', 'public.user_settings', 'SELECT'),
+  'anonymous grants exclude role assignments, permission matrix, and private settings'
 );
 
 select * from finish();
