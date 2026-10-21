@@ -38,6 +38,7 @@ checks.push(
   ['admin RPCs reject anonymous/public execution', /revoke all on function public\.admin_set_user_role\(uuid, text\) from public, anon;/i.test(adminRpcs) && /revoke all on function public\.admin_revoke_restriction\(uuid, text\) from public, anon;/i.test(adminRpcs)],
   ['admin RPCs grant execution only to authenticated role', (adminRpcs.match(/grant execute on function public\.admin_/gi) || []).length === 4 && !/grant execute on function public\.admin_[^;]+ to (?:anon|public)\s*;/i.test(adminRpcs)],
   ['role assignment is restricted to main admin and blocks self-change', /not public\.is_main_admin\(\)/i.test(adminRpcs) && /target_user = actor[\s\S]*?Self role changes are not allowed/i.test(adminRpcs)],
+  ['role assignment RPC protects main admin accounts', /The main admin role cannot be changed through this RPC/i.test(adminRpcs)],
   ['moderation RPCs check permissions and validate reason text', /public\.has_permission\('users\.restrict'\)/i.test(adminRpcs) && /public\.has_permission\('users\.unrestrict'\)/i.test(adminRpcs) && /char_length\(trim\(reason_text\)\) < 5/i.test(adminRpcs)],
   ['moderation RPC prevents restrictions against the main admin account', /The main admin account cannot be restricted/i.test(adminRpcs)],
   ['authorization helpers are not executable by anonymous/public roles', /revoke all on function public\.has_permission\(text\) from public, anon;/i.test(helperGrants) && /revoke all on function public\.is_main_admin\(\) from public, anon;/i.test(helperGrants)],
