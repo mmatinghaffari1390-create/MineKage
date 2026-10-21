@@ -54,7 +54,6 @@ select ok(
   'authenticated profile update policy exists'
 );
 
-
 select ok(
   to_regprocedure('public.profile_is_visible(uuid)') is not null,
   'profile visibility is checked through a dedicated RLS-safe function'
@@ -83,14 +82,8 @@ select ok(
 );
 
 select ok(
-  position('as $function
-  'friendship guard function is installed with a dollar-quoted body'
-);
-
-select * from finish();
-rollback;
- in lower(pg_get_functiondef('public.guard_friendship_update()'::regprocedure))) > 0,
-  'friendship guard function is installed with a dollar-quoted body'
+  position('Friendship participants cannot be changed' in pg_get_functiondef('public.guard_friendship_update()'::regprocedure)) > 0,
+  'friendship guard function includes participant protection'
 );
 
 select * from finish();
