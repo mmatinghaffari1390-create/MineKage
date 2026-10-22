@@ -1,0 +1,34 @@
+name: Supabase database tests
+
+on:
+  pull_request:
+    branches: ["main"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+# The pull_request event covers commits pushed to the open PR; avoid running a
+# second copy of the same database suite from a branch push event.
+concurrency:
+  group: supabase-tests-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  database:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+      - name: Set up Supabase CLI
+        uses: supabase/setup-cli@v1
+        with:
+          version: latest
+      - name: Start local Supabase (omit non-test services)
+        timeout-minutes: 10
+        run: supabase start -x studio,imgproxy,edge-runtime,logflare,vector
+      - name: Apply migrations to disposable local database
+        run: supabase db reset
+      - name: Run pgTAP database tests
+        run: supabase test db

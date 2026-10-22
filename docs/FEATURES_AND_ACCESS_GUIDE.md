@@ -32,7 +32,9 @@ This document describes what the public website does today, how to use it, and w
 - A trusted status provider and reviewed server submissions are required before real listings can be advertised.
 
 ### Community, streams, and leaderboard
-- The public layout previews these future areas.
+- The public layout previews community profiles and leaderboard features; these still require a verified backend data source.
+- The Live / Creators panel now links to YouTube's live browsing page so visitors can discover Minecraft broadcasts without the site pretending to host or verify them.
+- This is a general YouTube discovery link, not a curated or verified MineKage stream feed. An official channel or trusted stream source must be configured before the site can show verified creator listings.
 - No fake creator streams, player profiles, achievements, scores, or online counts are displayed.
 - Actual accounts, profiles, friendships, moderation, and leaderboard data require the backend setup described below.
 
@@ -63,13 +65,14 @@ A version filter only finds projects that declare that version in their Modrinth
 The repository contains initial Supabase migration files, but they have **not** been applied to a live Supabase project. Consequently:
 - Sign-up, sign-in, email verification, password recovery, profile editing, friendships, and account deletion are not active.
 - Admin roles, moderation actions, audit logs, verified server submissions, and editable catalogue administration are not active in production.
+- Permission-checked admin RPC migrations and a first-admin bootstrap guide now exist in the repository. The latest GitHub Actions run successfully applied the migrations to a disposable local database and passed the pgTAP suite; this validates that test run only, not a live Supabase deployment or a full independent security review.
 - A static GitHub Pages frontend cannot safely store privileged database credentials or perform privileged moderation by itself.
 
 To activate these features:
 1. Create a dedicated Supabase project.
 2. Review all migrations and run them first in a disposable test project.
 3. Test row-level security with anonymous users, regular members, admins, and the main administrator.
-4. Implement server-side or carefully permission-checked database functions for privileged changes.
+4. Review and test the included permission-checked admin RPC migrations in a disposable project; do not expose privileged operations directly to the browser.
 5. Configure email verification and account recovery, privacy/legal text, and account deletion.
 6. Store privileged secrets only in the provider's secret settings; never commit them to GitHub or expose them in `VITE_*` frontend variables.
 7. Configure a controlled first-admin bootstrap process, then test every role and audit path before public launch.

@@ -88,3 +88,31 @@
 
 /* Make live-catalogue compatibility guidance readable in both locales. */
 .catalogue-compatibility-hint{margin:12px 0 18px;padding:12px 14px;border:1px solid rgba(167,139,250,.2);border-inline-start:3px solid rgba(34,211,238,.65);border-radius:10px;background:rgba(20,16,35,.55);color:var(--muted,#b9b4c9);font-size:12px;line-height:1.85}
+
+
+/* Accessibility: respect operating-system reduced-motion preferences site-wide. */
+@media (prefers-reduced-motion: reduce) {
+  html:focus-within { scroll-behavior: auto !important; }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Make the installation guide link in the catalogue easy to discover and keyboard-focus. */
+.install-guide-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-inline-start: 8px;
+  text-decoration: underline;
+  text-decoration-color: rgba(34, 211, 238, .55);
+  text-underline-offset: 3px;
+}
+.install-guide-link:focus-visible {
+  outline: 2px solid #67e8f9;
+  outline-offset: 4px;
+  border-radius: 3px;
+}

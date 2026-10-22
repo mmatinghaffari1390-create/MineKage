@@ -17,6 +17,7 @@ as $$
 $$;
 
 revoke all on function public.profile_is_visible(uuid) from public;
+revoke all on function public.profile_is_visible(uuid) from anon;
 grant execute on function public.profile_is_visible(uuid) to authenticated;
 
 drop policy if exists "authenticated users read visible profiles" on public.profiles;

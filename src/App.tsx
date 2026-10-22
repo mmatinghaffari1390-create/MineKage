@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import {
   ArrowDownRight, ArrowRight, ArrowUpRight, Blocks, Check,
-  Compass, Gamepad2, Globe2, Gem, Heart, Menu, Search, ShieldCheck,
+  Compass, Eye, Gem, Gamepad2, Globe2, Heart, Menu, Search, ShieldCheck,
   Sparkles, Swords, Users, X, Zap,
 } from 'lucide-react'
 
@@ -32,14 +32,14 @@ const copy = {
     viewAll: 'View all', featured: 'FEATURED DESTINATIONS', curated: 'CURATED DISCOVERY',
     java: 'JAVA EDITION', bedrock: 'BEDROCK', survival: 'SURVIVAL', creative: 'CREATIVE',
     adventure: 'ADVENTURE', minigames: 'MINIGAMES', trusted: 'SOURCE-FIRST PICKS',
-    trustSub: 'Every listing should show where it comes from. No fake download buttons, ratings, or live counts.',
+    trustSub: 'Curated links are starting points, not compatibility guarantees. Check each official project page for supported versions, loaders, dependencies, and installation notes. No fake download buttons, ratings, or live counts.',
     members: 'COMMUNITY', account: 'Account features need backend setup',
     accountSub: 'Sign-in, profiles, and friendships need a configured authentication provider and database before they can work.',
     signIn: 'Account setup required', footer: 'A community project for the love of Minecraft.',
     legal: 'Independent fan project. Not affiliated with Mojang or Microsoft.',
     search: 'Search worlds, mods, servers…', all: 'All', noResults: 'No matching items. Try another search.',
-    status: 'Status provider not connected', soon: 'Not connected', detail: 'Browse server directory',
-    footerExplore: 'EXPLORE', footerCommunity: 'COMMUNITY', footerNote: 'Your next story is waiting.', liveCatalog: 'LIVE MODRINTH CATALOGUE', liveCatalogSub: 'Search community projects by type and Minecraft Java version.', loadingProjects: 'Loading projects…', loadError: 'The live catalogue could not load. Use the official catalogue link below.', liveCount: 'LIVE RESULTS', retry: 'Try again', downloads: 'downloads', compatibilityHint: 'Compatibility tip: filter by Minecraft version and, for mods, by loader. Before installing, open the project page and check its supported versions, dependencies, and installation notes.',
+    status: 'Status provider not connected', soon: 'Backend setup required', detail: 'Browse server directory',
+    footerExplore: 'EXPLORE', footerCommunity: 'COMMUNITY', footerNote: 'Your next story is waiting.', liveCatalog: 'LIVE MODRINTH CATALOGUE', liveCatalogSub: 'Search community projects by type and Minecraft Java version.', loadingProjects: 'Loading projects…', loadError: 'The live catalogue could not load. Use the official catalogue link below.', liveCount: 'LIVE RESULTS', retry: 'Try again', downloads: 'downloads', compatibilityHint: 'Compatibility tip: filter by Minecraft version and, for mods, by loader. Before installing, open the project page and check its supported versions, dependencies, and installation notes.', installGuide: 'Read the installation guide',
   },
   fa: {
     eyebrow: 'دروازه باز است؛ قدم به ناشناخته بگذار',
@@ -60,14 +60,14 @@ const copy = {
     viewAll: 'مشاهده همه', featured: 'مقصدهای منتخب', curated: 'اکتشاف گزینش‌شده',
     java: 'نسخه جاوا', bedrock: 'بدراک', survival: 'بقا', creative: 'خلاقانه',
     adventure: 'ماجراجویی', minigames: 'مینی‌گیم', trusted: 'منبع در اولویت',
-    trustSub: 'هر مورد باید منبع مشخص داشته باشد؛ بدون دکمه دانلود، امتیاز یا آمار زنده ساختگی.',
+    trustSub: 'پیوندهای منتخب فقط نقطه شروع‌اند و سازگاری را تضمین نمی‌کنند. نسخه‌های پشتیبانی‌شده، لودر، وابستگی‌ها و راهنمای نصب را در صفحه رسمی هر پروژه بررسی کن؛ بدون دکمه دانلود، امتیاز یا آمار زنده ساختگی.',
     members: 'جامعه', account: 'امکانات حساب به تنظیم سرویس پشتیبان نیاز دارند',
     accountSub: 'ورود، پروفایل و دوستی‌ها پس از اتصال امن سرویس احراز هویت و پایگاه داده فعال می‌شوند.',
     signIn: 'نیازمند تنظیم حساب', footer: 'پروژه‌ای اجتماعی برای عشق به ماینکرفت.',
     legal: 'پروژه مستقل هواداری؛ وابسته به Mojang یا Microsoft نیست.',
     search: 'جست‌وجوی دنیا، مود و سرور…', all: 'همه', noResults: 'موردی پیدا نشد؛ عبارت دیگری را امتحان کن.',
-    status: 'سرویس وضعیت متصل نیست', soon: 'متصل نیست', detail: 'مشاهده فهرست سرورها',
-    footerExplore: 'اکتشاف', footerCommunity: 'جامعه', footerNote: 'داستان بعدی‌ات منتظر توست.', liveCatalog: 'کاتالوگ زنده مودرینث', liveCatalogSub: 'پروژه‌های جامعه را بر اساس نوع و نسخه جاوا جست‌وجو کن.', loadingProjects: 'در حال دریافت پروژه‌ها…', loadError: 'کاتالوگ زنده بارگذاری نشد؛ از پیوند کاتالوگ رسمی پایین استفاده کن.', liveCount: 'نتایج زنده', retry: 'تلاش دوباره', downloads: 'بار دانلود', compatibilityHint: 'نکته سازگاری: نسخه ماینکرفت را فیلتر کن و برای مودها لودر را هم انتخاب کن. پیش از نصب، نسخه‌های پشتیبانی‌شده، وابستگی‌ها و راهنمای نصب را در صفحه رسمی پروژه بررسی کن.',
+    status: 'سرویس وضعیت متصل نیست', soon: 'نیازمند راه‌اندازی سرویس پشتیبان', detail: 'مشاهده فهرست سرورها',
+    footerExplore: 'اکتشاف', footerCommunity: 'جامعه', footerNote: 'داستان بعدی‌ات منتظر توست.', liveCatalog: 'کاتالوگ زنده مودرینث', liveCatalogSub: 'پروژه‌های جامعه را بر اساس نوع و نسخه جاوا جست‌وجو کن.', loadingProjects: 'در حال دریافت پروژه‌ها…', loadError: 'کاتالوگ زنده بارگذاری نشد؛ از پیوند کاتالوگ رسمی پایین استفاده کن.', liveCount: 'نتایج زنده', retry: 'تلاش دوباره', downloads: 'بار دانلود', compatibilityHint: 'نکته سازگاری: نسخه ماینکرفت را فیلتر کن و برای مودها لودر را هم انتخاب کن. پیش از نصب، نسخه‌های پشتیبانی‌شده، وابستگی‌ها و راهنمای نصب را در صفحه رسمی پروژه بررسی کن.', installGuide: 'راهنمای نصب و رفع مشکل',
   },
 } as const
 
@@ -101,6 +101,15 @@ const destinations = [
   { id: 27, kind: 'Resource packs', name: 'Visual Enchantments', sub: 'Clearer visual distinctions for enchanted gear', tag: 'VISUALS', color: 'violet', icon: Sparkles, url: 'https://modrinth.com/resourcepack/visual-enchantments' },
   { id: 28, kind: 'Shaders', name: 'Photon', sub: 'Atmospheric shader pack; check GPU and loader support', tag: 'SHADERS', color: 'blue', icon: Sparkles, url: 'https://modrinth.com/shader/photon-shader' },
   { id: 29, kind: 'Shaders', name: 'Sildur’s Vibrant Shaders', sub: 'Lighting and color options across supported setups', tag: 'SHADERS', color: 'pink', icon: Gem, url: 'https://modrinth.com/shader/sildurs-vibrant-shaders' },
+  { id: 30, kind: 'Mods', name: 'JEI (Just Enough Items)', sub: 'Browse items and recipes in supported modded setups', tag: 'UTILITY', color: 'blue', icon: Search, url: 'https://modrinth.com/mod/jei' },
+  { id: 31, kind: 'Mods', name: 'Xaero’s World Map', sub: 'Full-screen map companion for compatible Minecraft versions', tag: 'MAP', color: 'violet', icon: Compass, url: 'https://modrinth.com/mod/xaeros-world-map' },
+  { id: 32, kind: 'Mods', name: 'Simple Voice Chat', sub: 'Proximity voice chat; server setup and permissions may be required', tag: 'MULTIPLAYER', color: 'green', icon: Users, url: 'https://modrinth.com/plugin/simple-voice-chat' },
+  { id: 33, kind: 'Mods', name: 'Litematica', sub: 'Schematic planning tools for supported client setups', tag: 'BUILDING', color: 'pink', icon: Blocks, url: 'https://modrinth.com/mod/litematica' },
+  { id: 34, kind: 'Shaders', name: 'Bliss Shaders', sub: 'Atmospheric visuals; check hardware and version requirements', tag: 'SHADERS', color: 'violet', icon: Sparkles, url: 'https://modrinth.com/shader/bliss-shader' },
+  { id: 35, kind: 'Resource packs', name: 'Patrix', sub: 'Detailed visual style with version and resolution requirements', tag: 'TEXTURES', color: 'blue', icon: Blocks, url: 'https://modrinth.com/resourcepack/patrix' },
+  { id: 36, kind: 'Data packs', name: 'Terralith', sub: 'Overhauled Overworld terrain generation; review world setup notes', tag: 'WORLDGEN', color: 'green', icon: Compass, url: 'https://modrinth.com/datapack/terralith' },
+  { id: 37, kind: 'Mods', name: 'ReplayMod', sub: 'Record and replay gameplay on supported Minecraft versions', tag: 'CREATION', color: 'pink', icon: Gamepad2, url: 'https://modrinth.com/mod/replaymod' },
+  { id: 38, kind: 'Resource packs', name: 'Vanilla Tweaks', sub: 'Choose small vanilla-style resource and data pack tweaks', tag: 'CUSTOMIZATION', color: 'violet', icon: Blocks, url: 'https://vanillatweaks.net/' },
 ]
 
 const serverTypes = [
@@ -111,7 +120,7 @@ const serverTypes = [
 
 function Brand() {
   return <a className="brand" href="#home" aria-label="MineKage home">
-    <span className="brand-mark"><Gem size={22} strokeWidth={1.8} /></span>
+    <span className="brand-mark"><Eye size={22} strokeWidth={1.8} aria-hidden="true" /></span>
     <span className="brand-word">MINE<span>KAGE</span><small>FIND YOUR NEXT WORLD</small></span>
   </a>
 }
@@ -131,6 +140,8 @@ function App() {
   const [catalogueRetry, setCatalogueRetry] = useState(0)
   const [mobileOpen, setMobileOpen] = useState(false)
   const [accountNotice, setAccountNotice] = useState(false)
+  const accountOpenerRef = useRef<HTMLElement | null>(null)
+  const modalCloseRef = useRef<HTMLButtonElement>(null)
   const t = copy[locale]
   const rtl = locale === 'fa'
 
@@ -148,6 +159,12 @@ function App() {
     window.addEventListener('keydown', handleShortcuts)
     return () => window.removeEventListener('keydown', handleShortcuts)
   }, [])
+  useEffect(() => {
+    if (!accountNotice) return
+    modalCloseRef.current?.focus()
+    return () => accountOpenerRef.current?.focus()
+  }, [accountNotice])
+
   const navKeys: Section[] = ['home', 'servers', 'mods', 'explore', 'live', 'community', 'leaderboard']
   const kinds: ExploreKind[] = ['All', 'Mods', 'Shaders', 'Resource packs', 'Modpacks', 'Data packs', 'Maps', 'Plugins']
   const modrinthSearchUrl = `https://modrinth.com/${({ All: 'discover', Mods: 'mods', Shaders: 'shaders', 'Resource packs': 'resourcepacks', Modpacks: 'modpacks', 'Data packs': 'datapacks', Maps: 'worlds', Plugins: 'plugins' } as Record<ExploreKind, string>)[exploreKind]}${javaVersion === 'all' ? '' : `?g=${encodeURIComponent(javaVersion)}`}`
@@ -197,13 +214,13 @@ function App() {
     <header className="topbar">
       <div className="topbar-inner">
         <Brand />
-        <nav className={mobileOpen ? 'main-nav open' : 'main-nav'} aria-label="Main navigation">
-          {navKeys.map((key, i) => <button key={key} className={section === key ? 'nav-link active' : 'nav-link'} onClick={() => goTo(key)}>{t.nav[i]}</button>)}
+        <nav id="primary-navigation" className={mobileOpen ? 'main-nav open' : 'main-nav'} aria-label={rtl ? 'پیمایش اصلی' : 'Main navigation'}>
+          {navKeys.map((key, i) => <button key={key} className={section === key ? 'nav-link active' : 'nav-link'} onClick={() => { goTo(key); setMobileOpen(false) }}>{t.nav[i]}</button>)}
         </nav>
         <div className="top-actions">
-          <button className="language-switch" onClick={() => setLocale(rtl ? 'en' : 'fa')} aria-label="Switch language"><Globe2 size={16} /><span>{rtl ? 'EN' : 'فا'}</span></button>
-          <button className="button button-small button-quiet account-button" onClick={() => setAccountNotice(true)}>{t.signIn}<ArrowUpRight size={15} /></button>
-          <button className="mobile-menu" aria-label={mobileOpen ? 'Close menu' : 'Open menu'} onClick={() => setMobileOpen(!mobileOpen)}>{mobileOpen ? <X /> : <Menu />}</button>
+          <button className="language-switch" onClick={() => setLocale(rtl ? 'en' : 'fa')} aria-label={rtl ? 'تغییر زبان به انگلیسی' : 'Switch language to Persian'}><Globe2 size={16} aria-hidden="true" /><span>{rtl ? 'EN' : 'فا'}</span></button>
+          <button className="button button-small button-quiet account-button" onClick={(event) => { accountOpenerRef.current = event.currentTarget; setAccountNotice(true) }}>{t.signIn}<ArrowUpRight size={15} /></button>
+          <button className="mobile-menu" aria-label={mobileOpen ? (rtl ? 'بستن منو' : 'Close menu') : (rtl ? 'باز کردن منو' : 'Open menu')} aria-expanded={mobileOpen} aria-controls="primary-navigation" onClick={() => setMobileOpen(!mobileOpen)}>{mobileOpen ? <X aria-hidden="true" /> : <Menu aria-hidden="true" />}</button>
         </div>
       </div>
     </header>
@@ -254,7 +271,7 @@ function App() {
           {exploreKind === 'Mods' && <div className="version-tools"><label htmlFor="mod-loader">{locale === 'fa' ? 'لودر مود' : 'MOD LOADER'}</label><select id="mod-loader" value={modLoader} onChange={(e) => setModLoader(e.target.value as ModLoader)}>{(['all', 'fabric', 'forge', 'neoforge', 'quilt'] as ModLoader[]).map((loader) => <option key={loader} value={loader}>{loader === 'all' ? (locale === 'fa' ? 'همه لودرها' : 'All loaders') : loader[0].toUpperCase() + loader.slice(1)}</option>)}</select></div>}
           <div className="version-tools"><label htmlFor="java-version">{locale === 'fa' ? 'نسخه جاوا' : 'JAVA VERSION'}</label><select id="java-version" value={javaVersion} onChange={(e) => setJavaVersion(e.target.value as JavaVersion)}>{['all', ...javaVersions].map((version) => <option key={version} value={version}>{version === 'all' ? (locale === 'fa' ? 'همه نسخه‌ها' : 'All versions') : version}</option>)}</select><a className="button button-outline version-browse" href={modrinthSearchUrl} target="_blank" rel="noreferrer">{locale === 'fa' ? 'جست‌وجوی همه پروژه‌ها' : 'Browse all projects'}<ArrowUpRight size={15} /></a></div>
         </div>
-        <p className="catalogue-compatibility-hint" role="note">{t.compatibilityHint}</p>
+        <p className="catalogue-compatibility-hint" role="note">{t.compatibilityHint} <a className="text-link install-guide-link" href="https://github.com/mmatinghaffari1390-create/MineKage/blob/fix/initial-migration-syntax/docs/INSTALLING_MINECRAFT_CONTENT.md" target="_blank" rel="noreferrer">{t.installGuide}<ArrowUpRight size={15} /></a></p>
         <div className="destination-grid">
           {filteredDestinations.map((item, index) => {
             const Icon = item.icon
@@ -301,7 +318,7 @@ function App() {
       </section>
 
       <section className="section-wrap mini-sections">
-        <article className="mini-panel" id="live"><span className="mini-panel-icon"><Gamepad2 size={20} /></span><span className="mini-panel-label">LIVE / CREATORS</span><h3>{locale === 'fa' ? 'سازندگان را کشف کن' : 'Discover creators'}</h3><p>{locale === 'fa' ? 'وقتی منبع معتبر متصل شد، پخش‌های تأییدشده نمایش داده می‌شوند.' : 'Verified streams will appear when a trusted source is configured.'}</p><span className="coming-tag">{t.soon}</span></article>
+        <article className="mini-panel" id="live"><span className="mini-panel-icon"><Gamepad2 size={20} /></span><span className="mini-panel-label">LIVE / CREATORS</span><h3>{locale === 'fa' ? 'سازندگان را کشف کن' : 'Discover creators'}</h3><p>{locale === 'fa' ? 'تا زمان اتصال کانال رسمی MineKage، می‌توانی پخش‌های زنده ماینکرفت را در یوتیوب ببینی.' : 'Until an official MineKage channel is connected, browse Minecraft live streams on YouTube.'}</p><a className="button button-outline" href="https://www.youtube.com/live" target="_blank" rel="noopener noreferrer">{locale === 'fa' ? 'مشاهده پخش‌های زنده' : 'Browse live streams'}<ArrowUpRight size={16} /></a></article>
         <article className="mini-panel leaderboard-panel" id="leaderboard">
           <div className="leaderboard-heading"><div><span className="mini-panel-label">LEADERBOARD / COMMUNITY</span><h3>{locale === 'fa' ? 'رده‌بندی بازیکنان' : 'Community leaderboard'}</h3><p>{locale === 'fa' ? 'جدول رتبه‌بندی آماده است؛ رتبه‌ها پس از اتصال داده معتبر بازیکنان نمایش داده می‌شوند.' : 'The leaderboard is ready; player rankings will appear once verified player data is connected.'}</p></div><span className="mini-panel-icon"><Zap size={20} /></span></div>
           <div className="leaderboard-preview">
@@ -316,9 +333,9 @@ function App() {
       </section>
     </main>
 
-    <footer className="footer"><div className="section-wrap footer-main"><div className="footer-brand"><Brand /><p>{t.footer}</p></div><div className="footer-links"><div><span>{t.footerExplore}</span><button onClick={() => goTo('servers')}>{t.nav[1]}</button><button onClick={() => goTo('mods')}>{t.nav[2]}</button><button onClick={() => goTo('explore')}>{t.nav[3]}</button></div><div><span>{t.footerCommunity}</span><button onClick={() => goTo('community')}>{t.nav[5]}</button><button onClick={() => goTo('leaderboard')}>{t.nav[6]}</button><button onClick={() => setAccountNotice(true)}>{t.signIn}</button></div></div></div><div className="section-wrap footer-bottom"><span>© {new Date().getFullYear()} MINEKAGE</span><span>{t.legal}</span><span>{t.footerNote}</span></div></footer>
+    <footer className="footer"><div className="section-wrap footer-main"><div className="footer-brand"><Brand /><p>{t.footer}</p></div><div className="footer-links"><div><span>{t.footerExplore}</span><button onClick={() => goTo('servers')}>{t.nav[1]}</button><button onClick={() => goTo('mods')}>{t.nav[2]}</button><button onClick={() => goTo('explore')}>{t.nav[3]}</button></div><div><span>{t.footerCommunity}</span><button onClick={() => goTo('community')}>{t.nav[5]}</button><button onClick={() => goTo('leaderboard')}>{t.nav[6]}</button><button onClick={(event) => { accountOpenerRef.current = event.currentTarget; setAccountNotice(true) }}>{t.signIn}</button></div></div></div><div className="section-wrap footer-bottom"><span>© {new Date().getFullYear()} MINEKAGE</span><span>{t.legal}</span><span>{t.footerNote}</span></div></footer>
 
-    {accountNotice && <div className="modal-backdrop" role="presentation" onClick={() => setAccountNotice(false)}><div className="notice-modal" role="dialog" aria-modal="true" aria-labelledby="notice-title" onClick={(e) => e.stopPropagation()}><button className="modal-close" onClick={() => setAccountNotice(false)} aria-label="Close"><X size={19} /></button><span className="modal-icon"><ShieldCheck size={24} /></span><h2 id="notice-title">{t.account}</h2><p>{t.accountSub}</p><div className="modal-status"><span className="status-dot muted" />{t.soon}</div><button className="button button-primary modal-done" onClick={() => setAccountNotice(false)}><Check size={16} /> OK</button></div></div>}
+    {accountNotice && <div className="modal-backdrop" role="presentation" onClick={() => setAccountNotice(false)}><div className="notice-modal" role="dialog" aria-modal="true" aria-labelledby="notice-title" onClick={(e) => e.stopPropagation()}><button ref={modalCloseRef} className="modal-close" onClick={() => setAccountNotice(false)} aria-label={rtl ? 'بستن پنجره' : 'Close dialog'}><X size={19} aria-hidden="true" /></button><span className="modal-icon"><ShieldCheck size={24} /></span><h2 id="notice-title">{t.account}</h2><p>{t.accountSub}</p><div className="modal-status"><span className="status-dot muted" />{t.soon}</div><button className="button button-primary modal-done" onClick={() => setAccountNotice(false)}><Check size={16} aria-hidden="true" /> {rtl ? 'باشه' : 'OK'}</button></div></div>}
   </div>
 }
 
