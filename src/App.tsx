@@ -140,6 +140,8 @@ function App() {
   const [catalogueRetry, setCatalogueRetry] = useState(0)
   const [mobileOpen, setMobileOpen] = useState(false)
   const [accountNotice, setAccountNotice] = useState(false)
+  const accountOpenerRef = useRef<HTMLElement | null>(null)
+  const modalCloseRef = useRef<HTMLButtonElement>(null)
   const t = copy[locale]
   const rtl = locale === 'fa'
 
@@ -157,6 +159,12 @@ function App() {
     window.addEventListener('keydown', handleShortcuts)
     return () => window.removeEventListener('keydown', handleShortcuts)
   }, [])
+  useEffect(() => {
+    if (!accountNotice) return
+    modalCloseRef.current?.focus()
+    return () => accountOpenerRef.current?.focus()
+  }, [accountNotice])
+
   const navKeys: Section[] = ['home', 'servers', 'mods', 'explore', 'live', 'community', 'leaderboard']
   const kinds: ExploreKind[] = ['All', 'Mods', 'Shaders', 'Resource packs', 'Modpacks', 'Data packs', 'Maps', 'Plugins']
   const modrinthSearchUrl = `https://modrinth.com/${({ All: 'discover', Mods: 'mods', Shaders: 'shaders', 'Resource packs': 'resourcepacks', Modpacks: 'modpacks', 'Data packs': 'datapacks', Maps: 'worlds', Plugins: 'plugins' } as Record<ExploreKind, string>)[exploreKind]}${javaVersion === 'all' ? '' : `?g=${encodeURIComponent(javaVersion)}`}`
@@ -210,8 +218,8 @@ function App() {
           {navKeys.map((key, i) => <button key={key} className={section === key ? 'nav-link active' : 'nav-link'} onClick={() => { goTo(key); setMobileOpen(false) }}>{t.nav[i]}</button>)}
         </nav>
         <div className="top-actions">
-          <button className="language-switch" onClick={() => setLocale(rtl ? 'en' : 'fa')} aria-label="Switch language"><Globe2 size={16} /><span>{rtl ? 'EN' : 'فا'}</span></button>
-          <button className="button button-small button-quiet account-button" onClick={() => setAccountNotice(true)}>{t.signIn}<ArrowUpRight size={15} /></button>
+          <button className="language-switch" onClick={() => setLocale(rtl ? 'en' : 'fa')} aria-label={rtl ? 'تغییر زبان به انگلیسی' : 'Switch language to Persian'}><Globe2 size={16} aria-hidden="true" /><span>{rtl ? 'EN' : 'فا'}</span></button>
+          <button className="button button-small button-quiet account-button" onClick={(event) => { accountOpenerRef.current = event.currentTarget; setAccountNotice(true) }}>{t.signIn}<ArrowUpRight size={15} /></button>
           <button className="mobile-menu" aria-label={mobileOpen ? (rtl ? 'بستن منو' : 'Close menu') : (rtl ? 'باز کردن منو' : 'Open menu')} aria-expanded={mobileOpen} aria-controls="primary-navigation" onClick={() => setMobileOpen(!mobileOpen)}>{mobileOpen ? <X aria-hidden="true" /> : <Menu aria-hidden="true" />}</button>
         </div>
       </div>
@@ -325,9 +333,9 @@ function App() {
       </section>
     </main>
 
-    <footer className="footer"><div className="section-wrap footer-main"><div className="footer-brand"><Brand /><p>{t.footer}</p></div><div className="footer-links"><div><span>{t.footerExplore}</span><button onClick={() => goTo('servers')}>{t.nav[1]}</button><button onClick={() => goTo('mods')}>{t.nav[2]}</button><button onClick={() => goTo('explore')}>{t.nav[3]}</button></div><div><span>{t.footerCommunity}</span><button onClick={() => goTo('community')}>{t.nav[5]}</button><button onClick={() => goTo('leaderboard')}>{t.nav[6]}</button><button onClick={() => setAccountNotice(true)}>{t.signIn}</button></div></div></div><div className="section-wrap footer-bottom"><span>© {new Date().getFullYear()} MINEKAGE</span><span>{t.legal}</span><span>{t.footerNote}</span></div></footer>
+    <footer className="footer"><div className="section-wrap footer-main"><div className="footer-brand"><Brand /><p>{t.footer}</p></div><div className="footer-links"><div><span>{t.footerExplore}</span><button onClick={() => goTo('servers')}>{t.nav[1]}</button><button onClick={() => goTo('mods')}>{t.nav[2]}</button><button onClick={() => goTo('explore')}>{t.nav[3]}</button></div><div><span>{t.footerCommunity}</span><button onClick={() => goTo('community')}>{t.nav[5]}</button><button onClick={() => goTo('leaderboard')}>{t.nav[6]}</button><button onClick={(event) => { accountOpenerRef.current = event.currentTarget; setAccountNotice(true) }}>{t.signIn}</button></div></div></div><div className="section-wrap footer-bottom"><span>© {new Date().getFullYear()} MINEKAGE</span><span>{t.legal}</span><span>{t.footerNote}</span></div></footer>
 
-    {accountNotice && <div className="modal-backdrop" role="presentation" onClick={() => setAccountNotice(false)}><div className="notice-modal" role="dialog" aria-modal="true" aria-labelledby="notice-title" onClick={(e) => e.stopPropagation()}><button className="modal-close" onClick={() => setAccountNotice(false)} aria-label="Close"><X size={19} /></button><span className="modal-icon"><ShieldCheck size={24} /></span><h2 id="notice-title">{t.account}</h2><p>{t.accountSub}</p><div className="modal-status"><span className="status-dot muted" />{t.soon}</div><button className="button button-primary modal-done" onClick={() => setAccountNotice(false)}><Check size={16} /> OK</button></div></div>}
+    {accountNotice && <div className="modal-backdrop" role="presentation" onClick={() => setAccountNotice(false)}><div className="notice-modal" role="dialog" aria-modal="true" aria-labelledby="notice-title" onClick={(e) => e.stopPropagation()}><button ref={modalCloseRef} className="modal-close" onClick={() => setAccountNotice(false)} aria-label={rtl ? 'بستن پنجره' : 'Close dialog'}><X size={19} aria-hidden="true" /></button><span className="modal-icon"><ShieldCheck size={24} /></span><h2 id="notice-title">{t.account}</h2><p>{t.accountSub}</p><div className="modal-status"><span className="status-dot muted" />{t.soon}</div><button className="button button-primary modal-done" onClick={() => setAccountNotice(false)}><Check size={16} aria-hidden="true" /> {rtl ? 'باشه' : 'OK'}</button></div></div>}
   </div>
 }
 
