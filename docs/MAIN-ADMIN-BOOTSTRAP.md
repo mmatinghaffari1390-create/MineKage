@@ -19,11 +19,13 @@ begin;
 
 do $bootstrap$
 declare
-  target_user_id uuid := 'REPLACE-WITH-VERIFIED-AUTH-USER-UUID'::uuid;
+  target_user_id_text text := 'REPLACE-WITH-VERIFIED-AUTH-USER-UUID';
+  target_user_id uuid;
 begin
-  if target_user_id::text = 'replace-with-verified-auth-user-uuid' then
+  if target_user_id_text = 'REPLACE-WITH-VERIFIED-AUTH-USER-UUID' then
     raise exception 'Replace the placeholder with the verified auth.users UUID';
   end if;
+  target_user_id := target_user_id_text::uuid;
 
   if not exists (select 1 from auth.users where id = target_user_id) then
     raise exception 'Verified auth.users account was not found';
