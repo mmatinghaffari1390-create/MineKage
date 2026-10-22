@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import {
   ArrowDownRight, ArrowRight, ArrowUpRight, Blocks, Check,
-  Compass, Gamepad2, Globe2, Gem, Heart, Menu, Search, ShieldCheck,
+  Compass, Eye, Gamepad2, Globe2, Heart, Menu, Search, ShieldCheck,
   Sparkles, Swords, Users, X, Zap,
 } from 'lucide-react'
 
@@ -120,7 +120,7 @@ const serverTypes = [
 
 function Brand() {
   return <a className="brand" href="#home" aria-label="MineKage home">
-    <span className="brand-mark"><Gem size={22} strokeWidth={1.8} /></span>
+    <span className="brand-mark"><Eye size={22} strokeWidth={1.8} aria-hidden="true" /></span>
     <span className="brand-word">MINE<span>KAGE</span><small>FIND YOUR NEXT WORLD</small></span>
   </a>
 }
