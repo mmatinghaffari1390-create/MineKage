@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import {
   ArrowDownRight, ArrowRight, ArrowUpRight, Blocks, Check,
-  Compass, Eye, Gamepad2, Globe2, Heart, Menu, Search, ShieldCheck,
+  Compass, Eye, Gem, Gamepad2, Globe2, Heart, Menu, Search, ShieldCheck,
   Sparkles, Swords, Users, X, Zap,
 } from 'lucide-react'
 
