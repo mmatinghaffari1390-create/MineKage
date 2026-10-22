@@ -10,7 +10,7 @@ A bilingual, responsive React + TypeScript + Vite frontend for Minecraft communi
 - Frontend checks and deployment run automatically on pushes to `main`.
 - English/Persian language switch with RTL layout.
 - Responsive navigation, keyboard focus styling, reduced-motion support, discovery search, category filters, and `Ctrl/⌘ + K` search shortcut.
-- Discovery cards link directly to official Modrinth project pages for Sodium, Lithium, and FerriteCore, plus the Modrinth catalogue. Check the project page for exact game version, loader, and compatibility before installing.
+- The discovery area includes a curated set of mods, shaders, resource packs, data packs, maps, and plugins, plus a live Modrinth search by project type and Java release version. Mod loader filters are available for mods. Always check the creator's official page for exact compatibility before installing.
 - Server categories are examples of play styles, not verified server listings. No live server status is claimed.
 - Leaderboard and live creator sections intentionally do not invent users, scores, or live stream data.
 - Account, profile, friendship, and moderation features are not active until a real backend is configured.
@@ -48,8 +48,8 @@ SQL migrations are in `supabase/migrations/`. They define initial tables and Row
 
 **These migrations have not been applied to a Supabase project and are not production-certified.** Before applying them:
 - Use a disposable test project and independently review every policy with anonymous and authenticated accounts.
-- Run database tests for privilege escalation, profile privacy, friendship state transitions, and audit immutability.
-- Implement secure server-side/RPC operations for role changes and moderation. The browser must never be allowed to assign its own roles or write audit records.
+- The local GitHub Actions workflow currently applies the migrations to a disposable database and runs the pgTAP suite successfully. Repeat tests after changes and independently review policies with anonymous and authenticated accounts before using a live project.
+- Permission-checked RPC migrations for role changes and moderation, plus an audited main-admin bootstrap guide, are included. They still need review and controlled setup against a dedicated Supabase project; the browser must never assign its own roles or write audit records.
 - Bootstrap the first main administrator only after verifying the exact account identity through a controlled procedure; no administrator identity is hard-coded.
 - Configure authentication providers, email delivery, account recovery, privacy policy, and account deletion, then test each flow.
 - Never place service-role keys, database passwords, or OAuth client secrets in frontend code or public repository files.
@@ -64,9 +64,9 @@ The static security check and TypeScript/build checks are useful safeguards, but
 
 1. Review the responsive site on mobile and desktop.
 2. Configure a dedicated Supabase project and review/apply migrations only after tests.
-3. Implement and test authentication, profile privacy, and account lifecycle.
+3. Configure and test authentication, profile privacy, and account lifecycle against a dedicated Supabase project.
 4. Implement friendship state changes, verified content management, and a trustworthy server-status source.
-5. Add permission-checked moderation, append-only audit records, and admin workflows.
+5. Integrate and independently validate the included permission-checked moderation RPCs, append-only audit records, and admin workflows.
 6. Populate the catalogue only with reviewed sources, version compatibility, license details, and creator attribution.
 7. Complete accessibility, privacy/legal review, and production checks before calling the site fully launched.
 
