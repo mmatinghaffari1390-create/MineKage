@@ -65,13 +65,14 @@ A version filter only finds projects that declare that version in their Modrinth
 The repository contains initial Supabase migration files, but they have **not** been applied to a live Supabase project. Consequently:
 - Sign-up, sign-in, email verification, password recovery, profile editing, friendships, and account deletion are not active.
 - Admin roles, moderation actions, audit logs, verified server submissions, and editable catalogue administration are not active in production.
+- Permission-checked admin RPC migrations and a first-admin bootstrap guide now exist in the repository, but they are still un-applied and unverified against a live project. The latest local-database CI run must finish successfully before treating the migrations as validated.
 - A static GitHub Pages frontend cannot safely store privileged database credentials or perform privileged moderation by itself.
 
 To activate these features:
 1. Create a dedicated Supabase project.
 2. Review all migrations and run them first in a disposable test project.
 3. Test row-level security with anonymous users, regular members, admins, and the main administrator.
-4. Implement server-side or carefully permission-checked database functions for privileged changes.
+4. Review and test the included permission-checked admin RPC migrations in a disposable project; do not expose privileged operations directly to the browser.
 5. Configure email verification and account recovery, privacy/legal text, and account deletion.
 6. Store privileged secrets only in the provider's secret settings; never commit them to GitHub or expose them in `VITE_*` frontend variables.
 7. Configure a controlled first-admin bootstrap process, then test every role and audit path before public launch.
