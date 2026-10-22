@@ -206,13 +206,13 @@ function App() {
     <header className="topbar">
       <div className="topbar-inner">
         <Brand />
-        <nav className={mobileOpen ? 'main-nav open' : 'main-nav'} aria-label="Main navigation">
-          {navKeys.map((key, i) => <button key={key} className={section === key ? 'nav-link active' : 'nav-link'} onClick={() => goTo(key)}>{t.nav[i]}</button>)}
+        <nav id="primary-navigation" className={mobileOpen ? 'main-nav open' : 'main-nav'} aria-label={rtl ? 'پیمایش اصلی' : 'Main navigation'}>
+          {navKeys.map((key, i) => <button key={key} className={section === key ? 'nav-link active' : 'nav-link'} onClick={() => { goTo(key); setMobileOpen(false) }}>{t.nav[i]}</button>)}
         </nav>
         <div className="top-actions">
           <button className="language-switch" onClick={() => setLocale(rtl ? 'en' : 'fa')} aria-label="Switch language"><Globe2 size={16} /><span>{rtl ? 'EN' : 'فا'}</span></button>
           <button className="button button-small button-quiet account-button" onClick={() => setAccountNotice(true)}>{t.signIn}<ArrowUpRight size={15} /></button>
-          <button className="mobile-menu" aria-label={mobileOpen ? 'Close menu' : 'Open menu'} onClick={() => setMobileOpen(!mobileOpen)}>{mobileOpen ? <X /> : <Menu />}</button>
+          <button className="mobile-menu" aria-label={mobileOpen ? (rtl ? 'بستن منو' : 'Close menu') : (rtl ? 'باز کردن منو' : 'Open menu')} aria-expanded={mobileOpen} aria-controls="primary-navigation" onClick={() => setMobileOpen(!mobileOpen)}>{mobileOpen ? <X aria-hidden="true" /> : <Menu aria-hidden="true" />}</button>
         </div>
       </div>
     </header>
