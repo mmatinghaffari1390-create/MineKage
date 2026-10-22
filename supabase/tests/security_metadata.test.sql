@@ -2,7 +2,7 @@
 -- These metadata tests do not replace authenticated multi-user integration tests.
 begin;
 create extension if not exists pgtap with schema extensions;
-select plan(28);
+select plan(29);
 
 select ok(
   exists (select 1 from pg_trigger where tgname = 'guard_friendship_update' and not tgisinternal),
@@ -218,6 +218,12 @@ select ok(
 select ok(
   position('The main admin role cannot be changed through this RPC' in pg_get_functiondef('public.admin_set_user_role(uuid,text)'::regprocedure)) > 0,
   'role assignment RPC protects main admin accounts from role changes'
+);
+
+select ok(
+  position('Scope the collision handler to the profile insert only.' in pg_get_functiondef('public.handle_new_user()'::regprocedure)) > 0
+  and position('insert into public.user_roles (user_id, role_key) values (new.id, ' || chr(39) || 'member' || chr(39) || ')' in pg_get_functiondef('public.handle_new_user()'::regprocedure)) > 0,
+  'signup trigger scopes username collision recovery to profile creation and still assigns member role'
 );
 
 select * from finish();
