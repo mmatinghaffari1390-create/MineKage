@@ -4,6 +4,7 @@ import { readFile } from 'node:fs/promises'
 const initial = await readFile('supabase/migrations/202610200001_initial_schema.sql', 'utf8')
 const hardening = await readFile('supabase/migrations/202610200002_security_hardening.sql', 'utf8')
 const tests = await readFile('supabase/tests/security_metadata.test.sql', 'utf8')
+const signupFix = await readFile('supabase/migrations/202610220001_fix_signup_username_collision.sql', 'utf8')
 
 const friendshipStart = initial.indexOf('create or replace function public.guard_friendship_update()')
 const friendshipEnd = initial.indexOf('create trigger guard_friendship_update', friendshipStart)
@@ -18,6 +19,8 @@ const checks = [
   ['no client role write policy', /no client INSERT\/UPDATE\/DELETE policies for roles/i.test(initial)],
   ['server-side permission helper is defined', /create or replace function public\.has_permission/i.test(initial)],
   ['new accounts are not granted admin by signup trigger', /insert into public\.user_roles\s*\(user_id, role_key\)\s*values\s*\(new\.id, 'member'\)/i.test(initial)],
+  ['signup collision handler is scoped to profile insert', /Scope the collision handler to the profile insert only/i.test(signupFix) && /exception\s+when unique_violation/i.test(signupFix) && /insert into public\.user_roles/i.test(signupFix)],
+  ['signup profile display name is limited to schema maximum', /candidate_display_name := left\([\s\S]*?,\s*40\s*\)/i.test(signupFix)],
   ['profile visibility helper uses a locked-down search path', /create or replace function public\.profile_is_visible\(target_user_id uuid\)[\s\S]*?security definer[\s\S]*?set search_path = ''/i.test(hardening)],
   ['profile policy uses visibility helper', /or public\.profile_is_visible\(user_id\)/i.test(hardening)],
   ['friendship trigger prevents participant identity changes', /new\.requester_id is distinct from old\.requester_id[\s\S]*?new\.addressee_id is distinct from old\.addressee_id/i.test(hardening)],
